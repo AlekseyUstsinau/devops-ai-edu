@@ -1,27 +1,4 @@
-## Demo Scenario: FROM EMAIL TO DEPLOYED INFRA
-
-The goal of this demo is to show how an LLM can act as a DevOps co-pilot, automatically performing business analysis, converting requirements into structured work items (Jira), and generating production-ready (lol) infrastructure code (Terraform) and CI/CD pipelines (GitHub Actions).
-
----
-
-### Step 1. The Vague Input (Simulated Email/Slack)
-
-This request is deliberately high-level and incomplete.
-
-Demonstrator Action: Read the high-level request aloud. Stop immediately and ask the audience, "What essential technical details are missing here?" This highlights the informational gap the LLM needs to fill.
-
-> Email from Manager:
->
-> "Team, we urgently need to prepare the new environment on AWS for the launch of the corporate website.
-> It must be scalable and secure enough to handle future load.
-> Please ensure the entire infrastructure is fully automated and ready to integrate with our CI/CD pipelines.
-> We need the core structure ready by the end of this week. "
-
-Example Prompt/Input: N/A (Initial context only)
-
-Expected LLM Output: N/A
-
----
+## Demo Scenario: FROM EMAIL TO DEPLOYED APP
 
 ### Step 5. Initial Prompt to the LLM: The "Business Analyst" Role
 
@@ -39,11 +16,13 @@ Demonstrator Action: Paste the detailed prompt, emphasizing the LLM's role as an
 > > We need the core structure ready by the end of this week." 
 >
 > Tech details:
+> Building app - Push to ECR - deploy to ECS
 > We use ECR and github action
 > We need to deploy to ECS Fargate
 > TF resource for task defenition and ECS service should be created
 > Rely on exist terraform code that wil be the base where all of this will be deployed
 > We dont have any templates or blueprints for deployment so it should be created completely
+>  Use bestpractices for that sphere as guide to follow
 >
 > Your current task: Analyze requirements, details to find any gaps, absents in deployment.
 > Ask me a series of sequential questions to clarify it in order to create full detailed ready to work jira ticket
@@ -63,6 +42,7 @@ Demonstrator Action: Execute Prompt 2. Emphasize that the LLM is converting unst
 > Create ticket in Jira using instructions
 
 Expected LLM Output: A fully formatted, ready-to-use Jira ticket.
+
 
 ### Step 5. Code Generation (Terraform & CI/CD)
 
@@ -86,8 +66,6 @@ Expected LLM Output: A set of well-structured and commented code files, fulfilli
 
 ---
 
-### Step 6. Deployment and Verification (Wrap Up)
-
-**Demonstrator Action:** Conclude the demo by summarizing the total time saved (e.g., "From vague email to production-ready, best-practice Terraform code in **15 minutes**"). This is the final impact statement.
+### Step 6. Deployment and Verification
 
 On this step pipeline could be triggered.
