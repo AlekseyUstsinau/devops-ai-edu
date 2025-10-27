@@ -8,6 +8,8 @@ Prepare ONLY two files (at minimum — stubs with a short purpose statement):
 1. `.github/instructions/terraform.instruction.md` — where infra code lives and what is allowed (read, propose plan, etc.).
 2. `.github/instructions/jira.instruction.md` — how Jira issues should be formed (required fields, summary pattern).
 
+vscode://settings/chat.modeFilesLocations
+
 ## What they should contain (short)
 - Project terms / context (1–2 short paragraphs).
 - Allowed actions (bullet list).
