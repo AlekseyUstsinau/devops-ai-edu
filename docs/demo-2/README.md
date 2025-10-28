@@ -28,18 +28,16 @@ CONSTRAINTS:
 OUTPUT: Show only added/changed blocks.
 ```
 
+## Bestpractices
+
 
 ## Cost Optimization / Resource Efficiency
 
 You already have a working environment and CI/CD pipeline.
 Now, your goal is to:
-
-Analyze the deployed infrastructure for cost inefficiencies.
-
-Implement Terraform and pipeline optimizations suggested by LLM.
-
-Validate that the updated configuration uses fewer resources or is more cost-effective.
-
+   Analyze the deployed infrastructure for cost inefficiencies.
+   Implement Terraform and pipeline optimizations suggested by LLM.
+   Validate that the updated configuration uses fewer resources or is more cost-effective.
 
 ```
 ROLE: FinOps & Resource Efficiency Reviewer.
@@ -77,8 +75,6 @@ OUTPUT:
 - Terraform code diff showing only added or changed blocks.
 - Updated GitHub Actions YAML snippets demonstrating runtime optimizations.
 - Final summary table: "Improvement | Impact | Est. Monthly Savings (USD)".
-
-
 ```
 
 
@@ -94,7 +90,7 @@ OUTPUT:
 
 
 
-🔍 1. Prometheus / Logging Investigation
+### Logging Investigation
 
 ✅ Отличный кейс — все девопсы с этим сталкиваются.
 💡 Сделай упор не на “LLM как парсер логов”, а на путь рассуждения:
@@ -126,18 +122,6 @@ OUTPUT:
 ⚠️ Но не делай это “технической рекламой CLI”. Лучше подай как: “вот как LLM встроился в мой shell-цикл”.
 
 
-🔁 5. Reverse Engineering / Infra Converter
+🔁 5.  Infra Converter
 
-💡 Интересная идея, но это рискованная для лайв-демо зона, потому что:
-
-качество реверс-кода у LLM плавает;
-
-может быть трудно показать красивый end-result за 10 минут;
-
-требует подготовленных артефактов (AWS state, Azure target).
-
-Если хочешь сохранить идею — подай это как proof-of-concept, не “production demo”:
-
-“Suppose we have AWS infra and need to move to Azure. Let’s see how LLM helps us bootstrap this conversion — not perfect, but it gives 70% starting code in minutes.”
-
-⚠️ Сделай акцент на том, что LLM не заменяет инженера, а ускоряет начальную стадию миграции.
+Конверт АВС инфраструктуры из terraform папки в terraform/azure в Ажур

@@ -33,16 +33,6 @@ Existing Known Patterns (for reference):
 
 **Demonstrator Action**: Read the email aloud. Ask the audience: "What is missing to turn this into actionable engineering work?" Capture answers under categories.
 
-Missing Info Categories:
-- Architecture: Network layout, ALB vs CloudFront, NAT, scaling.
-- Security: TLS, IAM roles, least privilege, security groups.
-- Scalability: Traffic estimates, auto scaling policies.
-- Observability: Metrics, log retention, alerts.
-- Compliance & Governance: Tags, cost, environment naming.
-- Delivery: Branching, pipeline stages, rollback strategy.
-
-Transition: "We'll have the LLM ask us structured clarification questions in themed blocks."
-
 **Expected Output**: Categorized list of gaps ready to feed into the LLM prompt.
 
 ---
@@ -65,14 +55,34 @@ KNOWN EXISTING PATTERNS:
 - 2 Availability Zones: us-east-1a, us-east-1b
 - Public subnets: 10.0.1.0/24, 10.0.2.0/24 (for ALB)
 - Private subnets: 10.0.3.0/24, 10.0.4.0/24 (for ECS tasks)
+- ECS task should have access to pull images from ECR
+- keep 80 open for 0.0.0.0
 - Internet Gateway with public routing
 - Private route tables for internal communication
 - ALB Security Group: HTTP (port 80) from 0.0.0.0/0
+
+- ECR creation required.
+- No custom DNS required. Only ALB DNS will be used for demo.
+- No TLS required.
+- No CDN required.
+- No static data on S3/RDS
+
+- Use bestpractices for name convenction
+- Terraform should not be hardcoded but parameterized with vaariables
+- state bucket `cloud-infrastructure-tfstate-prod` in eu-central-1, no dynamodb lock
+
+- Github workflow: manual trigger with no approvals
+- Github workflow: use access/secret keys from github secrets
+
+- Use bestpractices instead of asking if applicable
+- Do not bring other services except core ones required for run service.
+
 
 CONSTRAINTS:
 - Ask questions in themed blocks: Architecture, Security, Scalability, Observability, Compliance/Governance, Delivery/Workflow.
 - After each block STOP so I can answer.
 - Focus only on gaps; avoid already-known details.
+- Keep it simple. For demo purposes i dont need a lot of details and customization.
 
 OUTPUT FORMAT:
 Block: <Theme>
@@ -102,7 +112,7 @@ After all answers gathered, paste:
 ```
 ROLE: DevOps Architect.
 TASK: Create the final Infrastructure Jira ticket in Markdown.
-INPUT: Consolidated answers (below). <PASTE ALL ANSWERS CLEANLY>
+INPUT: Q/A with LLM above
 OUTPUT FORMAT (Markdown):
 Title: <Concise infra provisioning title>
 Description: High-level intent (1–2 paragraphs).
@@ -121,7 +131,7 @@ Action: Copy into Jira (manual or via API). Show minimal editing required.
 
 Follow-up Tasks:
 - Create GitHub Issue from the Markdown (if using GitHub Issues instead of Jira).
-- Create Jira ticket using organization workflow (paste Markdown directly).
+- Create Jira ticket from the Markdown.
 
 **Expected Output**: Polished infrastructure Jira ticket with Title, Description, AC list, Implementation Plan, Risks, Tags, References.
 
@@ -172,6 +182,7 @@ CONSTRAINTS:
 - Pass AWS credentials via GitHub Secrets.
 - Cache Terraform plugins for speed.
 OUTPUT: Single YAML file.
+.github/workflows/terraform.yaml
 ```
 **Expected Output**: One workflow YAML showing jobs/steps: checkout, setup Terraform, init, validate, plan (artifact/comment), gated apply.
 
@@ -212,24 +223,6 @@ OUTPUT: Updated 02-variables.tf and any changed references.
 
 ---
 
-## 11. Prompt: Final Validation Checklist
-
-**Demonstrator Action**: Run prompt; optionally perform a quick local `terraform validate`; emphasize checklist as reproducible QA gate.
-```
-ROLE: Senior Reviewer.
-TASK: Provide final checklist verifying:
-- terraform validate passes.
-- Plan produces only expected resources.
-- All resources tagged.
-- No plaintext secrets.
-- Separation of plan/apply in CI.
-- Observability and security enhancements included.
-OUTPUT: Markdown checklist.
-```
-**Expected Output**: Clear verification checklist enumerating readiness criteria for infra and pipeline.
-
----
-
-### 12. Deployment and Verification (Wrap Up)
+### 11. Deployment and Verification (Wrap Up)
 
 **Demonstrator Action:** Conclude the demo by summarizing the total time saved. This is the final impact statement. On this step pipeline could be triggered.

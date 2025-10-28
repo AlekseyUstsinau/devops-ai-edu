@@ -36,20 +36,6 @@ Application Deployment Need (extracted):
 
 **Demonstrator Action**: Ask audience: "What is missing to make the app deploy work item actionable?" Capture answers under themes.
 
-Missing Info Categories:
-- Image Build: Base image, runtime (nginx vs custom), Docker build context path.
-- Runtime Config: Container port, health check path, environment variables (e.g., APP_ENV, LOG_LEVEL).
-- Release Strategy: Branch triggers (main, feature), version tagging, rollback approach.
-- Scaling: Desired count, min/max tasks, CPU/memory per task, autoscaling metrics.
-- Security: IAM role permissions (least privilege for task), private subnets usage, image scanning, secrets handling.
-- Observability: Log group naming, metrics/alarms (CPU, 5xx from ALB), health check.
-- Governance: Tags, naming conventions, image naming pattern.
-- Deployment Workflow: Manual approval gate? Canary vs direct replacement? Timeout & failure handling.
-
-Transition: "We'll have the LLM ask structured clarification questions in themed blocks focusing only on gaps."
-
-**Expected Output**: Categorized gap list ready for clarification prompt.
-
 ---
 
 ## 4. Prompt: Clarification Questions (Application Ticket)
@@ -65,6 +51,37 @@ INPUT (Context):
 > "Team, we urgently need to prepare the new environment on AWS for the launch of the corporate website. It must be scalable and secure enough to handle future load. Please ensure the entire infrastructure is fully automated and ready to integrate with our CI/CD pipelines with steps: build app, push to ECR, deploy. We need the core structure ready by the end of this week."
 - Existing Infra: VPC, Subnets, ALB (HTTP 80), ECS Cluster, ECR, IAM baseline, CloudWatch Logs.
 - Artifact: Static website (index.html and assets).
+- ECS Task and service should be created for that deployment under terraform folder, if they do not exist yet
+- Use bestpractices instead of asking if applicable
+- Github workflow: manual trigger with no approvals
+- Github workflow: stages: build -> push to ECR -> deploy to ECS
+- Do not bring other services except core ones required for run service.
+- tag latest everytime for demo
+- keep it simple
+- Keep default values where possible
+- amd64 arch only
+- No ENV vars to pass
+- No secrets to pass
+- sipliest health check
+- CPU/MEM for demo purposes keep minimal
+- Use bestpractises for dockerfile
+- 80 port
+- bestpractise for deployment strategy
+- no storage required
+- minimum traffic expected
+- no autoskaling for demo
+- desired count = 1
+- Single AZ
+- No TLS
+- IAM only for pull from ECR
+- Internet should allow to pull from ECR
+- No secretes
+- No Security scans
+- no waf
+- Use bestpractices instead of asking if applicable
+- Very minimum observability with default values where possible.
+- Github workflow: manual trigger with no approvals
+- Github workflow: stages: build -> push to ECR -> deploy to ECS
 
 CONSTRAINTS:
 - Ask questions in themed blocks: Image Build, Runtime Config, Scaling, Security, Observability, Delivery/Workflow, Governance.
@@ -86,14 +103,6 @@ Questions:
 ## 5. Q&A Iterations (Collect App Answers)
 
 **Demonstrator Action**: Answer first block; say "Next block" to progress sequentially. Maintain a clean answer sheet.
-Example Short Answers (Illustrative):
-- Image Build: "Use official nginx:1.25-alpine, copy static assets to /usr/share/nginx/html, no build tool needed."
-- Runtime Config: "Expose container port 80, health check path /, env: APP_ENV=prod, LOG_LEVEL=info."
-- Scaling: "Start desired 2 tasks, min 2, max 8, autoscale on CPU>60% for 5 mins."
-- Security: "Task role: read SSM parameter for future config (placeholder), execution role for ECR only, run as non-root user nginx (Alpine defaults), restrict SG to ALB only (port 80)."
-- Observability: "CloudWatch Log group /ecs/corp-site, retention 30d, add alarm on ALB 5xx>50 over 5m (phase 2)."
-- Delivery/Workflow: "Build on PR + push main; plan deploy on PR, apply only on merge to main with manual approval; tag image with git sha + semver if release."
-- Governance: "Tags: Project=Demo AI, Owner=DevOps, Environment=Prod, Component=CorpSite, CostCenter=Web. Image name: corp-site-web."
 
 **Expected Output**: Completed answer set across all themes.
 
@@ -105,7 +114,7 @@ Example Short Answers (Illustrative):
 ```
 ROLE: DevOps Architect.
 TASK: Create the Application Deployment Jira ticket in Markdown.
-INPUT: <PASTE CONSOLIDATED ANSWERS>
+INPUT: Summary from QA section
 OUTPUT FORMAT:
 Title: <Concise app deployment title>
 Description: 1–2 paragraphs describing intent.
@@ -119,6 +128,8 @@ References: Infra ticket, manager email, assumptions.
 QUALITY RULES:
 - Each AC testable & scoped.
 - No items outside provided answers.
+
+Save it as markdown file under docs/ folder
 ```
 
 Follow-up Tasks:
@@ -142,8 +153,8 @@ app/
   Dockerfile
   README.md            # brief build & run instructions
 terraform/             # existing root from infra demo (DO NOT duplicate backend/provider)
-  ecs-task-definition-app.tf   # new task definition for CorpSite
-  ecs-service-app.tf           # new ECS service referencing existing ALB target group (or creates target group if not yet present)
+  ecs-task-definition-app.tf   # if task tefenition not exist already
+  ecs-service-app.tf           # if not exist already
   app-security-groups.tf       # (only if separate SG needed to restrict ingress from ALB SG)
   ecs-autoscaling-app.tf       # (added later in autoscaling step; placeholder comment ok now)
   locals-app.tf                # (optional) naming helpers, or extend existing locals
@@ -170,7 +181,7 @@ OUTPUT STYLE:
 ```
 ROLE: CI/CD Engineer.
 TASK: Create GitHub Actions workflow yaml to build & deploy app.
-NAME: app-deploy.yml
+NAME: main.yml
 TRIGGERS: manual workflow_dispatch.
 JOBS:
 - build_and_push: build image, login ECR, push (tags: sha, 'latest').
@@ -233,29 +244,7 @@ OUTPUT: Show changed blocks only (for resources missing the pattern) and confirm
 
 ---
 
-## 12. Prompt: Final Validation Checklist
-
-**Demonstrator Action**: Request checklist.
-```
-ROLE: Senior Reviewer.
-TASK: Provide final deployment readiness checklist.
-ITEMS:
-- Docker build reproducible (no unpinned major surprises).
-- terraform validate passes.
-- Plan matches ticket scope.
-- All resources tagged.
-- Non-root container enforced.
-- No plaintext secrets / credentials in code.
-- CI/CD separation of build, plan, apply.
-- Autoscaling policy configured and observable.
-- Rollback path (redeploy previous image tag) documented.
-OUTPUT: Markdown checklist.
-```
-**Expected Output**: Checklist used to conclude demo.
-
----
-
-## 13. Deployment & Verification (Wrap Up)
+## 11. Deployment & Verification (Wrap Up)
 
 **Demonstrator Action**: Summarize acceleration vs manual approach; optionally trigger workflow_dispatch run to show build and plan stages. Highlight future phases: TLS on ALB, WAF, image scanning automation, SSM parameter usage.
 

@@ -9,6 +9,7 @@ Prepare ONLY two files (at minimum — stubs with a short purpose statement):
 2. `.github/instructions/jira.instruction.md` — how Jira issues should be formed (required fields, summary pattern).
 
 vscode://settings/chat.modeFilesLocations
+vscode://settings/chat.instructionsFilesLocations
 
 ## What they should contain (short)
 - Project terms / context (1–2 short paragraphs).
