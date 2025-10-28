@@ -40,56 +40,7 @@ Existing Known Patterns (for reference):
 ## 4. Prompt: Clarification Questions (Infra Ticket)
 
 **Demonstrator Action**: Paste prompt exactly; press enter; read first block aloud; ask audience if anything to add before answering.
-Paste this prompt:
-```
-ROLE: You are an experienced DevOps Architect & Business Analyst.
-TASK: Transform a high-level requirement into a fully specified Infra provisioning Jira ticket by first asking clarification questions.
-
-INPUT (Manager Email):
-"Team, we urgently need to prepare the new environment on AWS for the launch of the corporate website. It must be scalable and secure enough to handle future load. Please ensure the entire infrastructure is fully automated and ready to integrate with our CI/CD pipelines. We need the core structure ready by the end of this week."
-
-KNOWN EXISTING PATTERNS:
-- Region: us-east-1
-- VPC (public + private subnets), ECS Fargate, ECR, S3 backend, CloudWatch Logs, GitHub Actions, static site artifact.
-- VPC with CIDR: 10.0.0.0/16
-- 2 Availability Zones: us-east-1a, us-east-1b
-- Public subnets: 10.0.1.0/24, 10.0.2.0/24 (for ALB)
-- Private subnets: 10.0.3.0/24, 10.0.4.0/24 (for ECS tasks)
-- ECS task should have access to pull images from ECR
-- keep 80 open for 0.0.0.0
-- Internet Gateway with public routing
-- Private route tables for internal communication
-- ALB Security Group: HTTP (port 80) from 0.0.0.0/0
-
-- ECR creation required.
-- No custom DNS required. Only ALB DNS will be used for demo.
-- No TLS required.
-- No CDN required.
-- No static data on S3/RDS
-
-- Use bestpractices for name convenction
-- Terraform should not be hardcoded but parameterized with vaariables
-- state bucket `cloud-infrastructure-tfstate-prod` in eu-central-1, no dynamodb lock
-
-- Github workflow: manual trigger with no approvals
-- Github workflow: use access/secret keys from github secrets
-
-- Use bestpractices instead of asking if applicable
-- Do not bring other services except core ones required for run service.
-
-
-CONSTRAINTS:
-- Ask questions in themed blocks: Architecture, Security, Scalability, Observability, Compliance/Governance, Delivery/Workflow.
-- After each block STOP so I can answer.
-- Focus only on gaps; avoid already-known details.
-- Keep it simple. For demo purposes i dont need a lot of details and customization.
-
-OUTPUT FORMAT:
-Block: <Theme>
-Questions:
-1. ...
-2. ...
-```
+Paste this prompt (external file): see `docs/demo-1/prompts/01-clarification-questions.md`.
 **Live Tip**: Keep answers concise (bullets). Emphasize speed vs traditional back-and-forth.
 
 **Expected Output**: A clearly themed first block (e.g., Architecture) with focused numbered questions.
@@ -108,25 +59,7 @@ Cycle through each block. Provide short answers (e.g., "ALB for ingress, HTTP on
 ## 6. Prompt: Generate Infrastructure Jira Ticket
 
 **Demonstrator Action**: Consolidate notes; paste them cleanly into the prompt; run; skim AC for testability; copy Markdown to Jira.
-After all answers gathered, paste:
-```
-ROLE: DevOps Architect.
-TASK: Create the final Infrastructure Jira ticket in Markdown.
-INPUT: Q/A with LLM above
-OUTPUT FORMAT (Markdown):
-Title: <Concise infra provisioning title>
-Description: High-level intent (1–2 paragraphs).
-Acceptance Criteria:
-- AC-1: <Verifiable check>
-- AC-2: ...
-Implementation Plan: Ordered list of steps.
-Risks & Mitigations: Table or list.
-Tags: key-value list (Project, Owner, Environment, CostCenter).
-References: Original email, assumptions.
-QUALITY RULES:
-- Each AC must be testable.
-- No speculative items outside provided context.
-```
+After all answers gathered, paste the Jira generation prompt from `docs/demo-1/prompts/02-generate-jira-ticket.md`.
 Action: Copy into Jira (manual or via API). Show minimal editing required.
 
 Follow-up Tasks:
@@ -140,32 +73,7 @@ Follow-up Tasks:
 ## 7. Prompt: Initial Terraform Draft
 
 **Demonstrator Action**: Paste draft prompt; let output complete; confirm all listed files appear; mention deferred items if any.
-Generate baseline code.
-```
-ROLE: Senior Infrastructure Engineer.
-TASK: Produce initial Terraform code for infra ticket.
-OUTPUT FILE STRUCTURE (STRICT):
-terraform/
-  00-config.tf          # backend & required versions
-  01-provider.tf        # provider config
-  02-variables.tf       # minimal variables with defaults
-  03-outputs.tf         # key outputs
-  vpc.tf                # VPC resource(s)
-  subnets.tf            # public/private subnets
-  security-groups.tf    # security groups
-  alb.tf                # Application Load Balancer
-  ecr.tf                # ECR repository
-  ecs-cluster.tf        # ECS cluster definition
-  ecs-service.tf        # ECS service & task
-  iam.tf                # IAM roles/policies
-  ...
-CONSTRAINTS:
-- Use region variable with default us-east-1.
-- Keep variables minimal first (expand later).
-- No hard-coded secrets.
-- Reasonable naming conventions.
-- Only resources directly referenced by tickets.
-```
+Generate baseline code using prompt in `docs/demo-1/prompts/03-initial-terraform-draft.md`.
 **Expected Output**: Terraform file blocks matching requested structure with initial resource scaffolding and minimal variables.
 
 ---
@@ -173,17 +81,7 @@ CONSTRAINTS:
 ## 8. Prompt: Add GitHub Actions Pipeline
 
 **Demonstrator Action**: Request pipeline; verify plan/apply separation; highlight secrets usage not plaintext creds.
-```
-ROLE: CI/CD Engineer.
-TASK: Generate GitHub Actions workflow (YAML) to: init, validate, plan, apply Terraform in terraform/ directory.
-CONSTRAINTS:
-- Use separate jobs or steps for plan vs apply.
-- Apply runs only on manual approval or merge to main.
-- Pass AWS credentials via GitHub Secrets.
-- Cache Terraform plugins for speed.
-OUTPUT: Single YAML file.
-.github/workflows/terraform.yaml
-```
+See pipeline prompt: `docs/demo-1/prompts/04-github-actions-pipeline.md`.
 **Expected Output**: One workflow YAML showing jobs/steps: checkout, setup Terraform, init, validate, plan (artifact/comment), gated apply.
 
 ---
@@ -191,19 +89,7 @@ OUTPUT: Single YAML file.
 ## 9. Prompt: Best Practice Refinement (Tags & Governance)
 
 **Demonstrator Action**: Run refinement; scan resources for centralized tag map usage; call out governance alignment.
-```
-ROLE: Infra Reviewer.
-TASK: Refine Terraform: ensure every resource has standard tags. Apply other best practises if applicable.
-TAGS (add if missing):
-- Project = "Demo AI"
-- Owner = "DevOps"
-- Environment = "Prod"
-- CostCenter = "Web"
-RULES:
-- Centralize tag map variable.
-- Update each resource to use merge(var.default_tags, local.<resource_specific>) if needed.
-OUTPUT: Only changed files (show resource blocks with modifications).
-```
+Refinement prompt stored in `docs/demo-1/prompts/05-best-practice-refinement-tags.md`.
 **Expected Output**: Modified resource blocks with standardized tag map usage; no untagged resources remain.
 
 ---
@@ -211,14 +97,7 @@ OUTPUT: Only changed files (show resource blocks with modifications).
 ## 10. Prompt: Variables Everywhere
 
 **Demonstrator Action**: Execute; verify CIDRs, names, scaling thresholds replaced by variables with descriptions.
-```
-ROLE: Infra Optimization Engineer.
-TASK: Replace remaining hard-coded values with variables (CIDRs, names, scaling values) adding sensible defaults.
-CONSTRAINTS:
-- Keep complexity moderate.
-- Document each variable with description.
-OUTPUT: Updated 02-variables.tf and any changed references.
-```
+Variables expansion prompt: `docs/demo-1/prompts/06-variables-everywhere.md`.
 **Expected Output**: Expanded variables file plus updated resource references using variables and possibly locals for computed names.
 
 ---
