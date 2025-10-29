@@ -1,139 +1,274 @@
-# Terraform files# Terraform files
+# Terraform files# Terraform files# Terraform files
 
-*.tfstate*.tfstate
+*.tfstate
 
-*.tfstate.**.tfstate.*
+*.tfstate.**.tfstate*.tfstate
 
-*.tfvars*.tfvars
+*.tfvars
 
-*.tfvars.json*.tfvars.json
+*.tfvars.json*.tfstate.**.tfstate.*
 
-.terraform/.terraform/
+**/.terraform/
 
-terraform.tfstate.d/terraform.tfstate.d/
+**/.terraform/**.tfvars*.tfvars
 
-crash.logcrash.log
+terraform.tfstate.d/
 
-crash.*.logcrash.*.log
+crash.log*.tfvars.json*.tfvars.json
 
-override.tfoverride.tf
+crash.*.log
+
+override.tf.terraform/.terraform/
 
 override.tf.json
 
-*_override.tfoverride.tf.json# Crash log files
+*_override.tfterraform.tfstate.d/terraform.tfstate.d/
 
 *_override.tf.json
 
-.terraformrc*_override.tfcrash.log
+.terraformrccrash.logcrash.log
 
 terraform.rc
 
-*.tfplan*_override.tf.jsoncrash.*.log
+*.tfplancrash.*.logcrash.*.log
 
 *.tfplan.*
 
-.terraformrc
+override.tfoverride.tf
 
 # Terragrunt files
 
-.terragrunt-cache/terraform.rc# Exclude all .tfvars files, which are likely to contain sensitive data
+.terragrunt-cache/override.tf.json
 
 terragrunt.hcl.backup
 
-.terragrunt# such as password, private keys, and other secrets. These should not be part of version control
+.terragrunt*_override.tfoverride.tf.json# Crash log files
 
 
 
-# AWS CLI credentials and config (security)# Terragrunt files# as they are data points which are potentially sensitive and subject to change depending on the environment.
+# AWS CLI credentials and config (security)*_override.tf.json
 
 .aws/credentials
 
-.aws/config.terragrunt-cache/*.tfvars
+.aws/config.terraformrc*_override.tfcrash.log
 
 
 
-# Environment variablesterragrunt.hcl.backup*.tfvars.json
+# Environment variablesterraform.rc
 
 .env
 
-.env.local.terragrunt
+.env.local*.tfplan*_override.tf.jsoncrash.*.log
 
 .env.*.local
 
-# Ignore override files as they are usually used to override resources locally and so
+*.tfplan.*
 
 # VS Code files
 
-.vscode/# AWS CLI credentials and config (security)# are not checked in
+.vscode/.terraformrc
 
 *.code-workspace
 
-.history/.aws/credentialsoverride.tf
+.history/# Terragrunt files
 
 
 
-# Visual Studio files.aws/configoverride.tf.json
+# Visual Studio files.terragrunt-cache/terraform.rc# Exclude all .tfvars files, which are likely to contain sensitive data
 
 .vs/
 
-*.suo*_override.tf
+*.suoterragrunt.hcl.backup
 
 *.user
 
-*.userosscache# Environment variables*_override.tf.json
+*.userosscache.terragrunt# such as password, private keys, and other secrets. These should not be part of version control
 
 *.sln.docstates
 
-.env
+
 
 # IDE files
 
-.idea/.env.local# Include override files you do wish to add to version control using negated pattern
+.idea/# AWS CLI credentials and config (security)# Terragrunt files# as they are data points which are potentially sensitive and subject to change depending on the environment.
 
 *.swp
 
-*.swo.env.*.local# !example_override.tf
+*.swo.aws/credentials
 
 *~
 
-
+.aws/config.terragrunt-cache/*.tfvars
 
 # OS generated files
 
-.DS_Store# VS Code files# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+.DS_Store
 
 .DS_Store?
 
-._*.vscode/# example: *tfplan*
+._*# Environment variablesterragrunt.hcl.backup*.tfvars.json
 
 .Spotlight-V100
 
-.Trashes*.code-workspace
+.Trashes.env
 
 ehthumbs.db
 
-Thumbs.db.history/# Ignore CLI configuration files
+Thumbs.db.env.local.terragrunt
 
 desktop.ini
 
-.terraformrc
+.env.*.local
 
 # PowerShell files
 
-*.ps1xml# Visual Studio filesterraform.rc
+*.ps1xml# Ignore override files as they are usually used to override resources locally and so
 
 
 
-# Logs.vs/
+# Logs# VS Code files
 
 *.log
 
-logs/*.suo# IDE and Editor files
+logs/.vscode/# AWS CLI credentials and config (security)# are not checked in
 
 npm-debug.log*
 
-yarn-debug.log**.user.vscode/
+yarn-debug.log**.code-workspace
 
+yarn-error.log*
+
+.history/.aws/credentialsoverride.tf
+
+# Runtime data
+
+pids
+
+*.pid
+
+*.seed# Visual Studio files.aws/configoverride.tf.json
+
+*.pid.lock
+
+.vs/
+
+# Temporary folders
+
+tmp/*.suo*_override.tf
+
+temp/
+
+.tmp/*.user
+
+.temp/
+
+*.userosscache# Environment variables*_override.tf.json
+
+# Backup files
+
+*.bak*.sln.docstates
+
+*.backup
+
+*.old.env
+
+*.orig
+
+# IDE files
+
+# Certificate files (security)
+
+*.pem.idea/.env.local# Include override files you do wish to add to version control using negated pattern
+
+*.key
+
+*.crt*.swp
+
+*.cer
+
+*.p12*.swo.env.*.local# !example_override.tf
+
+*.pfx
+
+*~
+
+# SSH keys (security)
+
+id_rsa
+
+id_rsa.pub
+
+id_ed25519# OS generated files
+
+id_ed25519.pub
+
+.DS_Store# VS Code files# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+
+# Archive files
+
+*.zip.DS_Store?
+
+*.tar
+
+*.tar.gz._*.vscode/# example: *tfplan*
+
+*.rar
+
+*.7z.Spotlight-V100
+
+
+
+# Node modules (if any Node.js tools are used).Trashes*.code-workspace
+
+node_modules/
+
+package-lock.jsonehthumbs.db
+
+yarn.lock
+
+Thumbs.db.history/# Ignore CLI configuration files
+
+# Python files (if any Python tools are used)
+
+__pycache__/desktop.ini
+
+*.py[cod]
+
+*$py.class.terraformrc
+
+*.so
+
+.Python# PowerShell files
+
+env/
+
+venv/*.ps1xml# Visual Studio filesterraform.rc
+
+ENV/
+
+env.bak/
+
+venv.bak/
+
+# Logs.vs/
+
+# Ansible files
+
+*.retry*.log
+
+
+
+# Docker fileslogs/*.suo# IDE and Editor files
+
+.dockerignore
+
+npm-debug.log*
+
+# Local development
+
+.local/yarn-debug.log**.user.vscode/
+
+local/
 yarn-error.log*
 
 *.userosscache.idea/
