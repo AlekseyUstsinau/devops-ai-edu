@@ -1,53 +1,65 @@
 # Prompt 01: Foundational Best Practices Pass
-ROLE: Platform Engineer.
-OBJECTIVE: Apply foundational best practices to ONLY existing Terraform resources, GitHub Actions workflows, and Docker image. Do NOT add new AWS services. If you believe a new service would help, list it under Optional Additions with a YES/NO gate (default NO) instead of adding.
 
-SCOPE AREAS:
-1. Terraform Hygiene:
-   - Normalize & enforce tagging (merge default tags + ensure Component/Owner/Environment).
-   - Standardize log retention (e.g. 30 days) via variable if missing.
-   - Expose hard-coded values (retention, cpu/memory, desired_count) as variables.
-   - Add missing outputs for critical IDs (if helpful downstream).
-   - Reduce overly broad IAM policy statements (only if clearly safe; otherwise leave for Security Pass).
-2. GitHub Actions:
-   - Add/adjust caching (actions/cache) & path filters to skip unnecessary runs.
-   - Restrict workflow permissions to least privilege for each job.
-   - Pin all actions to version or SHA.
-   - Ensure artifact retention days is set explicitly (short for demo).
-3. Docker Image:
-   - Multi-stage build suggestion (if not present) for smaller runtime layer.
-   - Non-root user enforcement.
-   - Pin base image version.
-   - Add optional (commented) security scan step reference.
-4. Observability Basics:
-   - Ensure essential log groups retention set (no new services; placeholders allowed as comments for metrics/alerts).
+## Context
+You are a Platform Engineer reviewing an AWS infrastructure codebase with Terraform, GitHub Actions workflows, and a Dockerfile.
 
-OUTPUT SECTIONS (use exact headers below, no extra commentary outside them):
-## Inventory (Current vs Target)
-List concise tables per area summarizing gaps.
+## Objective
+**MODIFY THE ACTUAL FILES** to apply foundational best practices - do not just describe changes. Do NOT add new AWS services.
 
-## Recommended Terraform Changes
-Only changed/added blocks (no full file spam). Use HCL; include variable definitions if newly introduced.
+## Scope Areas
 
-## GitHub Actions Changes
-Job snippets / permissions & caching adjustments only.
+### 1. Terraform Hygiene
+- Normalize & enforce tagging (Component/Owner/Environment)
+- Standardize log retention (30 days) via variable
+- Expose hard-coded values (retention, cpu/memory, desired_count) as variables
+- Add missing outputs for critical IDs
+- Reduce overly broad IAM policies (if clearly safe)
 
-## Dockerfile Changes
-Show diff-style or replacement snippets.
+### 2. GitHub Actions Best Practices
+- Add caching for dependencies and build artifacts
+- Add path filters to skip unnecessary runs
+- Restrict workflow permissions to least privilege
+- Pin all actions to specific versions or commit SHAs
+- Set explicit artifact retention days (short for demos)
+- Add concurrency controls to prevent redundant runs
 
-## Optional Additions (YES/NO Gates)
-Bullet list of potential improvements (default NO). Example: WAF (NO), Image scanning step (YES), etc.
+### 3. Dockerfile Best Practices
+- Implement multi-stage build for smaller runtime layer
+- Non-root user enforcement
+- Pin base image version
+- Add optional (commented) security scan step reference
 
-## Tagging Matrix
-| Resource Type | Required Tags Present | Missing Tags | Action |
+### 4. Observability Basics
+- Ensure log groups have retention set (placeholders allowed as comments for metrics/alerts)
 
-## Consolidated Diff
-Unified minimal diff (Terraform + workflows + Docker) deduplicated.
+## Expected Actions
 
-## Rationale
-Bullet list mapping Change -> Benefit.
+**YOU MUST:**
+1. **Read all files** in .github/workflows/, terraform/, and app/ directories
+2. **Identify gaps** against best practices
+3. **Modify the actual files** to apply improvements
+4. **Provide a summary report** after making changes
 
-CONSTRAINTS:
-- No creation of new AWS services.
-- Keep changes minimal & foundational; deeper security reserved for next pass.
-- Avoid repeating identical blocks in multiple sections.
+**DO NOT:**
+- Only provide diffs or suggestions - actually edit the files
+- Add new AWS services without approval
+
+## Output Format
+
+After modifications, provide a summary report:
+
+### 1. Changes Applied
+| File | Changes Made | Reason |
+
+### 2. Best Practices Implemented
+- **Tagging**: [what was standardized]
+- **Variables**: [what was parameterized]
+- **Observability**: [what was improved]
+- **GitHub Actions**: [what was secured/optimized]
+- **Docker**: [what was enhanced]
+- **IAM**: [what was tightened]
+
+## Constraints
+- **No new AWS services** without explicit approval
+- Preserve existing functionality - only enhance configuration
+- Maintain compatibility with existing Terraform state

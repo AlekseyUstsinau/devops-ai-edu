@@ -142,3 +142,6 @@ Highlight next evolution:
 - Approx. minutes per case.
 - Count of changed Terraform lines.
 - Potential monthly cost delta (even if approximate for storytelling).
+
+----
+Steps 1,2,3,5 tooks 80 min on dry-run demo on cloude sonnet 4.5 model
