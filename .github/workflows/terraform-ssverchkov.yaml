@@ -64,8 +64,29 @@ jobs:
           sudo mv tfsec-linux-amd64 /usr/local/bin/tfsec
 
       - name: 'Run tfsec Security Scan'
-        run: tfsec . --format json --out tfsec-results.json
+        run: |
+          tfsec . --format json --out tfsec-results.json
+          tfsec . --format table --out tfsec-summary.txt
+          echo "Security scan completed. Check artifacts for detailed results."
         continue-on-error: true
+
+      - name: 'Display Security Summary'
+        run: |
+          if [ -f tfsec-summary.txt ]; then
+            echo "=== Security Scan Summary ==="
+            cat tfsec-summary.txt
+          fi
+        continue-on-error: true
+
+      - name: 'Upload Security Scan Results'
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tfsec-security-results
+          path: |
+            tfsec-results.json
+            tfsec-summary.txt
+          retention-days: 30
 
   terraform-plan:
     name: 'Terraform Plan'

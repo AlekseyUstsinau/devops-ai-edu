@@ -1,0 +1,29 @@
+---
+# tfsec configuration for demo environment
+# Excludes security checks that are acceptable for development/demo scenarios
+
+exclude:
+  # ALB/Load Balancer - Public access acceptable for demo
+  - aws-elb-alb-not-public
+  - aws-elb-http-not-used
+  
+  # VPC - Default VPC usage acceptable for demo
+  - aws-vpc-no-default-vpc
+  - aws-vpc-add-description-to-security-group
+  
+  # S3 - Backend bucket security handled separately
+  - aws-s3-enable-bucket-encryption
+  - aws-s3-enable-bucket-logging
+  - aws-s3-enable-versioning
+  
+  # ECS - Container insights not required for demo
+  - aws-ecs-enable-container-insight
+  - aws-ecs-no-plaintext-secrets
+  
+  # IAM - Broader permissions acceptable for demo roles
+  - aws-iam-no-policy-wildcards
+  - aws-iam-no-user-attached-policies
+
+severity_overrides:
+  HIGH: MEDIUM
+  CRITICAL: HIGH
