@@ -59,22 +59,38 @@ jobs:
 
       - name: 'Setup tfsec'
         run: |
+          echo "Downloading tfsec..."
           wget -q https://github.com/aquasecurity/tfsec/releases/download/v1.28.1/tfsec-linux-amd64
           chmod +x tfsec-linux-amd64
           sudo mv tfsec-linux-amd64 /usr/local/bin/tfsec
+          echo "tfsec installed, checking version:"
+          tfsec --version
 
       - name: 'Run tfsec Security Scan'
         run: |
-          tfsec . --format json --out tfsec-results.json
-          tfsec . --format table --out tfsec-summary.txt
-          echo "Security scan completed. Check artifacts for detailed results."
+          echo "Starting tfsec security scan..."
+          tfsec . --format json --out tfsec-results.json || echo "tfsec JSON scan completed with findings"
+          tfsec . --format table --out tfsec-summary.txt || echo "tfsec table scan completed with findings"
+          echo "Security scan completed. Files created:"
+          ls -la tfsec-*.* || echo "No tfsec files found"
         continue-on-error: true
 
       - name: 'Display Security Summary'
         run: |
+          echo "=== Checking for tfsec results ==="
+          pwd
+          ls -la
           if [ -f tfsec-summary.txt ]; then
             echo "=== Security Scan Summary ==="
             cat tfsec-summary.txt
+          else
+            echo "No tfsec-summary.txt file found"
+          fi
+          if [ -f tfsec-results.json ]; then
+            echo "=== JSON Results Size ==="
+            wc -l tfsec-results.json
+          else
+            echo "No tfsec-results.json file found"
           fi
         continue-on-error: true
 

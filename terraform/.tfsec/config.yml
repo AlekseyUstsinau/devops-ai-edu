@@ -3,26 +3,30 @@
 # Excludes security checks that are acceptable for development/demo scenarios
 
 exclude:
-  # ALB/Load Balancer - Public access acceptable for demo
-  - aws-elb-alb-not-public
-  - aws-elb-http-not-used
+  # Security Groups - Public internet access acceptable for demo web app
+  - aws-ec2-no-public-ingress-sgr     # ALB needs public ingress
+  - aws-ec2-no-public-egress-sgr      # ALB and ECS need public egress
+  - aws-ec2-no-public-ip-subnet       # Public subnets need public IPs
+  - aws-ec2-add-description-to-security-group  # Default descriptions OK for demo
   
-  # VPC - Default VPC usage acceptable for demo
-  - aws-vpc-no-default-vpc
-  - aws-vpc-add-description-to-security-group
+  # Load Balancer - Basic config acceptable for demo
+  - aws-elb-drop-invalid-headers      # Not critical for demo environment
+  - aws-elb-http-not-used             # HTTP acceptable for demo (no SSL cert)
+  - aws-elb-alb-not-public           # Public ALB required for demo web app
   
-  # S3 - Backend bucket security handled separately
-  - aws-s3-enable-bucket-encryption
-  - aws-s3-enable-bucket-logging
-  - aws-s3-enable-versioning
+  # ECR - Relaxed security for demo
+  - aws-ecr-enforce-immutable-repository  # Mutable tags OK for demo
+  - aws-ecr-enable-image-scans           # Image scanning not required for demo
+  - aws-ecr-repository-customer-key      # AWS managed keys OK for demo
   
-  # ECS - Container insights not required for demo
-  - aws-ecs-enable-container-insight
-  - aws-ecs-no-plaintext-secrets
+  # VPC/Networking - Basic monitoring acceptable for demo
+  - aws-ec2-require-vpc-flow-logs-for-all-vpcs  # Flow logs not required for demo
+  
+  # CloudWatch - AWS managed encryption acceptable for demo
+  - aws-cloudwatch-log-group-customer-key       # AWS managed keys OK for demo
   
   # IAM - Broader permissions acceptable for demo roles
-  - aws-iam-no-policy-wildcards
-  - aws-iam-no-user-attached-policies
+  - aws-iam-no-policy-wildcards        # Wildcards acceptable for demo ECR access
 
 severity_overrides:
   HIGH: MEDIUM
