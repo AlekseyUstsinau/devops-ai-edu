@@ -107,7 +107,7 @@ jobs:
         run: |
           echo "Testing Docker image..."
           # Run basic container test
-          docker run --rm -d --name test-container -p 8080:80 ${{ env.ECR_REPOSITORY }}:latest
+          docker run --rm -d --name test-container -p 8080:8080 ${{ env.ECR_REPOSITORY }}:latest
           sleep 10
           
           # Test health endpoint
