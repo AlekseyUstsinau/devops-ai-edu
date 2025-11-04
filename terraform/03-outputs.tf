@@ -43,11 +43,6 @@ output "ecs_cluster_name" {
   value       = aws_ecs_cluster.main.name
 }
 
-output "ecs_service_name" {
-  description = "Name of the ECS service"
-  value       = aws_ecs_service.main.name
-}
-
 # Corporate Site Outputs
 output "corp_site_service_name" {
   description = "Name of the Corporate Site ECS service"
@@ -65,6 +60,6 @@ output "corp_site_target_group_arn" {
 }
 
 output "corp_site_alb_listener_arn" {
-  description = "ARN of the Corporate Site ALB listener (shared with main)"
+  description = "ARN of the ALB listener"
   value       = aws_lb_listener.main.arn
 }

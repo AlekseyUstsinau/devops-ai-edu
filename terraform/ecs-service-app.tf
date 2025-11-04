@@ -7,8 +7,8 @@ resource "aws_ecs_service" "corp_site" {
 
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
-    subnets          = aws_subnet.public[*].id
-    assign_public_ip = true
+    subnets          = aws_subnet.private[*].id
+    assign_public_ip = false
   }
 
   load_balancer {
@@ -57,24 +57,4 @@ resource "aws_lb_target_group" "corp_site" {
   })
 }
 
-# Listener Rule for Corporate Site (catch-all for demo)
-resource "aws_lb_listener_rule" "corp_site" {
-  listener_arn = aws_lb_listener.main.arn
-  priority     = 100
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.corp_site.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["*"]
-    }
-  }
-
-  tags = merge(var.default_tags, {
-    Name      = "corp-website-${var.environment}-rule"
-    Component = "CorpSite"
-  })
-}
+# Listener rule removed - corp site is now the default action on the ALB listener

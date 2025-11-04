@@ -22,7 +22,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_task_failures" {
   alarm_actions       = []
 
   dimensions = {
-    ServiceName = aws_ecs_service.main.name
+    ServiceName = aws_ecs_service.corp_site.name
     ClusterName = aws_ecs_cluster.main.name
   }
 
