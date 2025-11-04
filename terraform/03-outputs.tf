@@ -14,8 +14,18 @@ output "private_subnet_ids" {
 }
 
 output "alb_dns_name" {
-  description = "DNS name of the Application Load Balancer"
+  description = "The DNS name of the Application Load Balancer"
   value       = aws_lb.main.dns_name
+}
+
+output "vpc_endpoints" {
+  description = "VPC endpoints for private subnet access to AWS services"
+  value = {
+    ecr_dkr = aws_vpc_endpoint.ecr_dkr.id
+    ecr_api = aws_vpc_endpoint.ecr_api.id
+    logs    = aws_vpc_endpoint.logs.id
+    s3      = aws_vpc_endpoint.s3.id
+  }
 }
 
 output "alb_zone_id" {

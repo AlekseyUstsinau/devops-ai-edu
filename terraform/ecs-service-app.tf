@@ -7,8 +7,8 @@ resource "aws_ecs_service" "corp_site" {
 
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
-    subnets          = aws_subnet.private[*].id
-    assign_public_ip = false
+    subnets          = aws_subnet.public[*].id
+    assign_public_ip = true
   }
 
   load_balancer {
@@ -17,7 +17,13 @@ resource "aws_ecs_service" "corp_site" {
     container_port   = 80
   }
 
-  depends_on = [aws_lb_listener.main]
+  depends_on = [
+    aws_lb_listener.main,
+    aws_vpc_endpoint.ecr_dkr,
+    aws_vpc_endpoint.ecr_api,
+    aws_vpc_endpoint.logs,
+    aws_vpc_endpoint.s3
+  ]
 
   tags = merge(var.default_tags, {
     Name      = "corp-website-${var.environment}-svc"
