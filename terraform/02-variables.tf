@@ -200,13 +200,13 @@ variable "default_tags" {
 variable "corp_site_task_cpu" {
   description = "CPU units for Corporate Site ECS task"
   type        = number
-  default     = 256  # 0.25 vCPU
+  default     = 256 # 0.25 vCPU
 }
 
 variable "corp_site_task_memory" {
   description = "Memory for Corporate Site ECS task"
   type        = number
-  default     = 512  # 0.5 GB
+  default     = 512 # 0.5 GB
 }
 
 variable "corp_site_desired_count" {
