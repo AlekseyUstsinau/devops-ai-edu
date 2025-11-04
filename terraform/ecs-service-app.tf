@@ -17,7 +17,7 @@ resource "aws_ecs_service" "corp_site" {
     container_port   = 80
   }
 
-  depends_on = [aws_lb_listener.corp_site]
+  depends_on = [aws_lb_listener.main]
 
   tags = merge(var.default_tags, {
     Name      = "${var.project_name}-${var.environment}-corp-site-service"
@@ -51,18 +51,5 @@ resource "aws_lb_target_group" "corp_site" {
   })
 }
 
-# ALB Listener for Corporate Site
-resource "aws_lb_listener" "corp_site" {
-  load_balancer_arn = aws_lb.main.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.corp_site.arn
-  }
-
-  tags = merge(var.default_tags, {
-    Component = "CorpSite"
-  })
-}
+# Note: Using existing ALB listener from main infrastructure
+# The corporate site will share the same ALB listener as the main application

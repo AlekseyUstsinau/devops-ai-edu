@@ -55,6 +55,6 @@ output "corp_site_target_group_arn" {
 }
 
 output "corp_site_alb_listener_arn" {
-  description = "ARN of the Corporate Site ALB listener"
-  value       = aws_lb_listener.corp_site.arn
+  description = "ARN of the Corporate Site ALB listener (shared with main)"
+  value       = aws_lb_listener.main.arn
 }
