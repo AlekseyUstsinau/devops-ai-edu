@@ -27,7 +27,7 @@ resource "aws_ecs_service" "corp_site" {
 
 # Target Group for Corporate Site
 resource "aws_lb_target_group" "corp_site" {
-  name        = "${var.project_name}-${var.environment}-corp-tg"
+  name        = "${var.project_name}-${var.environment}-corp-site-tg"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
@@ -46,10 +46,29 @@ resource "aws_lb_target_group" "corp_site" {
   }
 
   tags = merge(var.default_tags, {
-    Name      = "${var.project_name}-${var.environment}-corp-tg"
+    Name      = "${var.project_name}-${var.environment}-corp-site-tg"
     Component = "CorpSite"
   })
 }
 
-# Note: Using existing ALB listener from main infrastructure
-# The corporate site will share the same ALB listener as the main application
+# Listener Rule for Corporate Site (catch-all for demo)
+resource "aws_lb_listener_rule" "corp_site" {
+  listener_arn = aws_lb_listener.main.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.corp_site.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["*"]
+    }
+  }
+
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-corp-site-rule"
+    Component = "CorpSite"
+  })
+}
