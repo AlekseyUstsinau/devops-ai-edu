@@ -1,0 +1,6 @@
+Pipeline Trigger File
+
+This file is used to trigger the app deployment pipeline.
+
+Trigger 1: November 4, 2025 - Initial app pipeline trigger
+Purpose: Build and deploy corporate website Docker container to ECS
