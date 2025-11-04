@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "corp_site" {
-  family                   = "${var.project_name}-${var.environment}-corp-site-task"
+  family                   = "corp-website-${var.environment}-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.corp_site_task_cpu
@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "corp_site" {
 
   container_definitions = jsonencode([
     {
-      name  = "${var.project_name}-${var.environment}-corp-site-container"
+      name  = "corp-website-${var.environment}-container"
       image = "${aws_ecr_repository.main.repository_url}:${var.corp_site_image_tag}"
 
       portMappings = [
@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "corp_site" {
   ])
 
   tags = merge(var.default_tags, {
-    Name      = "${var.project_name}-${var.environment}-corp-site-task"
+    Name      = "corp-website-${var.environment}-task"
     Component = "CorpSite"
   })
 }
