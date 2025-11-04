@@ -10,7 +10,7 @@ COPY docs/demo-1/files/index.html /usr/share/nginx/html/
 
 # Create custom nginx configuration for health checks
 RUN echo 'server { \
-    listen 80; \
+    listen 8080; \
     server_name localhost; \
     root /usr/share/nginx/html; \
     index index.html; \
@@ -36,8 +36,8 @@ RUN chown -R appuser:appuser /var/cache/nginx && \
 # Switch to non-root user
 USER appuser
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080 (non-privileged port)
+EXPOSE 8080
 
 # Start nginx in foreground mode
 CMD ["nginx", "-g", "daemon off;"]
