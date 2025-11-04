@@ -5,11 +5,6 @@ resource "aws_ecs_service" "corp_site" {
   desired_count   = var.corp_site_desired_count
   launch_type     = "FARGATE"
 
-  deployment_configuration {
-    maximum_percent         = 200
-    minimum_healthy_percent = 100
-  }
-
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
     subnets          = aws_subnet.private[*].id
