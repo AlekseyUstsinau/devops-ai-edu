@@ -195,3 +195,47 @@ variable "default_tags" {
     ManagedBy   = "terraform"
   }
 }
+
+# Corporate Site Configuration
+variable "corp_site_task_cpu" {
+  description = "CPU units for Corporate Site ECS task"
+  type        = number
+  default     = 256  # 0.25 vCPU
+}
+
+variable "corp_site_task_memory" {
+  description = "Memory for Corporate Site ECS task"
+  type        = number
+  default     = 512  # 0.5 GB
+}
+
+variable "corp_site_desired_count" {
+  description = "Desired number of Corporate Site ECS tasks"
+  type        = number
+  default     = 1
+}
+
+variable "corp_site_image_tag" {
+  description = "Docker image tag for Corporate Site deployment"
+  type        = string
+  default     = "latest"
+}
+
+# Corporate Site Auto Scaling (for future use)
+variable "corp_site_min_capacity" {
+  description = "Minimum number of Corporate Site ECS tasks for auto scaling"
+  type        = number
+  default     = 1
+}
+
+variable "corp_site_max_capacity" {
+  description = "Maximum number of Corporate Site ECS tasks for auto scaling"
+  type        = number
+  default     = 5
+}
+
+variable "corp_site_cpu_scale_threshold" {
+  description = "CPU percentage threshold for Corporate Site scaling"
+  type        = number
+  default     = 70
+}

@@ -37,3 +37,24 @@ output "ecs_service_name" {
   description = "Name of the ECS service"
   value       = aws_ecs_service.main.name
 }
+
+# Corporate Site Outputs
+output "corp_site_service_name" {
+  description = "Name of the Corporate Site ECS service"
+  value       = aws_ecs_service.corp_site.name
+}
+
+output "corp_site_task_definition_arn" {
+  description = "ARN of the Corporate Site ECS task definition"
+  value       = aws_ecs_task_definition.corp_site.arn
+}
+
+output "corp_site_target_group_arn" {
+  description = "ARN of the Corporate Site target group"
+  value       = aws_lb_target_group.corp_site.arn
+}
+
+output "corp_site_alb_listener_arn" {
+  description = "ARN of the Corporate Site ALB listener"
+  value       = aws_lb_listener.corp_site.arn
+}
