@@ -12,12 +12,12 @@ resource "aws_cloudwatch_log_group" "ecs" {
 resource "aws_cloudwatch_metric_alarm" "ecs_task_failures" {
   alarm_name          = "${var.project_name}-${var.environment}-ecs-task-failures"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = var.alarm_evaluation_periods
   metric_name         = "ServiceEvent"
   namespace           = "AWS/ECS"
-  period              = "300"
+  period              = var.alarm_period
   statistic           = "Sum"
-  threshold           = "10"
+  threshold           = var.alarm_failure_threshold
   alarm_description   = "This metric monitors ECS task failures"
   alarm_actions       = []
 

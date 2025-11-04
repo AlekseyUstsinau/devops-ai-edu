@@ -5,41 +5,41 @@ resource "aws_lb" "main" {
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public[*].id
 
-  enable_deletion_protection = false
+  enable_deletion_protection = var.enable_deletion_protection
 
-  tags = {
+  tags = merge(var.default_tags, {
     Name = "${var.project_name}-${var.environment}-alb"
-  }
+  })
 }
 
 resource "aws_lb_target_group" "main" {
   name        = "${var.project_name}-${var.environment}-tg"
-  port        = 80
-  protocol    = "HTTP"
+  port        = var.container_port
+  protocol    = var.lb_protocol
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
 
   health_check {
-    enabled             = true
-    healthy_threshold   = 2
-    interval            = 30
-    matcher             = "200"
-    path                = "/"
+    enabled             = var.health_check_enabled
+    healthy_threshold   = var.health_check_healthy_threshold
+    interval            = var.health_check_interval
+    matcher             = var.health_check_matcher
+    path                = var.health_check_path
     port                = "traffic-port"
-    protocol            = "HTTP"
-    timeout             = 5
-    unhealthy_threshold = 2
+    protocol            = var.lb_protocol
+    timeout             = var.health_check_timeout
+    unhealthy_threshold = var.health_check_unhealthy_threshold
   }
 
-  tags = {
+  tags = merge(var.default_tags, {
     Name = "${var.project_name}-${var.environment}-tg"
-  }
+  })
 }
 
 resource "aws_lb_listener" "main" {
   load_balancer_arn = aws_lb.main.arn
-  port              = "80"
-  protocol          = "HTTP"
+  port              = var.lb_port
+  protocol          = var.lb_protocol
 
   default_action {
     type             = "forward"

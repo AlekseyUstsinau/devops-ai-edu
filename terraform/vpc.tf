@@ -3,9 +3,9 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags = {
+  tags = merge(var.default_tags, {
     Name = "${var.project_name}-${var.environment}-vpc"
-  }
+  })
 }
 
 resource "aws_internet_gateway" "main" {

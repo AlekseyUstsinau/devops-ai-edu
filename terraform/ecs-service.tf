@@ -10,12 +10,12 @@ resource "aws_ecs_task_definition" "main" {
   container_definitions = jsonencode([
     {
       name  = "${var.project_name}-${var.environment}-container"
-      image = "${aws_ecr_repository.main.repository_url}:latest"
+      image = "${aws_ecr_repository.main.repository_url}:${var.container_image_tag}"
 
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 80
+          containerPort = var.container_port
+          hostPort      = var.container_port
           protocol      = "tcp"
         }
       ]
@@ -33,9 +33,9 @@ resource "aws_ecs_task_definition" "main" {
     }
   ])
 
-  tags = {
+  tags = merge(var.default_tags, {
     Name = "${var.project_name}-${var.environment}-task"
-  }
+  })
 }
 
 resource "aws_ecs_service" "main" {
@@ -54,20 +54,20 @@ resource "aws_ecs_service" "main" {
   load_balancer {
     target_group_arn = aws_lb_target_group.main.arn
     container_name   = "${var.project_name}-${var.environment}-container"
-    container_port   = 80
+    container_port   = var.container_port
   }
 
   depends_on = [aws_lb_listener.main]
 
-  tags = {
+  tags = merge(var.default_tags, {
     Name = "${var.project_name}-${var.environment}-service"
-  }
+  })
 }
 
 # Auto Scaling Configuration
 resource "aws_appautoscaling_target" "ecs_target" {
   max_capacity       = var.ecs_max_capacity
-  min_capacity       = var.ecs_desired_count
+  min_capacity       = var.ecs_min_capacity
   resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.main.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
