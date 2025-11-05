@@ -1,1 +1,0 @@
-# Main service resources removed - using only corp_site service
