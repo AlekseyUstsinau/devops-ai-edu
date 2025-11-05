@@ -9,5 +9,7 @@ TAGS (add if missing):
 - CostCenter = "Web"
 RULES:
 - Centralize tag map variable.
-- Update each resource to use merge(var.default_tags, local.<resource_specific>) if needed.
+- Update each resource to use merge(var.default_tags, { Component = "..." }) pattern.
+- Use VPC endpoints for ECR/S3 instead of NAT Gateway (cost optimization ~$22/month vs ~$45/month).
+- Remove unnecessary default ECS services until application-specific requirements are defined.
 OUTPUT: Only changed files (show resource blocks with modifications).

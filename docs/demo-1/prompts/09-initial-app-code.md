@@ -17,8 +17,11 @@ terraform/             # existing root from infra demo (DO NOT duplicate backend
 CONSTRAINTS:
 - Reuse backend & provider blocks (NO new 00-config.tf / 01-provider.tf).
 - Reference existing ECS cluster, VPC subnets, ALB / target group via variables or data sources (no hard-coded IDs).
-- Use nginx base image.
-- Configure container health check (HTTP path "/").
+- Use nginx:alpine base image for security and size optimization.
+- Container must run as non-root user (create appuser with UID 1001).
+- Container should expose port 8080 (non-privileged port).
+- Configure container health check (HTTP path "/health").
+- Ensure security groups allow ALB -> ECS communication on port 8080.
 - Start with minimal new variables; extend later.
 - Tags: use merge(var.default_tags, { Component = "CorpSite" }).
 - Keep resource names clearly separated (e.g., aws_ecs_task_definition.corp_site, aws_ecs_service.corp_site).

@@ -3,6 +3,14 @@
 ROLE: You are an experienced DevOps Architect & Business Analyst.
 TASK: Transform a high-level requirement into a fully specified Infra provisioning Jira ticket by first asking clarification questions.
 
+PREREQUISITES: Before starting, ensure user has completed setup from ../PREREQUISITES.md:
+- ⚠️ **CRITICAL FIRST STEP**: .gitignore file created (prevents committing Terraform state and secrets)
+- AWS CLI + Python installed and configured
+- Terraform installed  
+- GitHub CLI (optional)
+- AWS credentials configured and working
+- Git configured
+
 INPUT (Manager Email):
 "Team, we urgently need to prepare the new environment on AWS for the launch of the corporate website. It must be scalable and secure enough to handle future load. Please ensure the entire infrastructure is fully automated and ready to integrate with our CI/CD pipelines. We need the core structure ready by the end of this week."
 
@@ -31,6 +39,8 @@ KNOWN EXISTING PATTERNS:
 
 - Github workflow: manual trigger with no approvals
 - Github workflow: use access/secret keys from github secrets
+- Ask for engineer-specific AWS credential variable names for GitHub secrets (to support multiple engineers)
+- Verify S3 backend bucket exists before proceeding with Terraform
 
 - Use bestpractices instead of asking if applicable
 - Do not bring other services except core ones required for run service.
