@@ -15,9 +15,10 @@ resource "aws_iam_role" "ecs_task_execution" {
     ]
   })
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-ecs-task-execution-role"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-ecs-task-execution-role"
+    Component = "CorpSite"
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
@@ -42,9 +43,10 @@ resource "aws_iam_role" "ecs_task" {
     ]
   })
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-ecs-task-role"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-ecs-task-role"
+    Component = "CorpSite"
+  })
 }
 
 # Additional policy for ECR access

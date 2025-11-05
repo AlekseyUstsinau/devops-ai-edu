@@ -6,7 +6,8 @@ resource "aws_ecs_cluster" "main" {
     value = "enabled"
   }
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-cluster"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-cluster"
+    Component = "ECS"
+  })
 }

@@ -11,9 +11,10 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-igw"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-igw"
+    Component = "Networking"
+  })
 }
 
 resource "aws_route_table" "public" {
@@ -24,16 +25,18 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.main.id
   }
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-public-rt"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-public-rt"
+    Component = "Networking"
+  })
 }
 
 resource "aws_route_table" "private" {
   count  = length(var.availability_zones)
   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-private-rt-${count.index + 1}"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-private-rt-${count.index + 1}"
+    Component = "Networking"
+  })
 }

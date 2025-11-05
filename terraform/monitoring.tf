@@ -3,9 +3,10 @@ resource "aws_cloudwatch_log_group" "ecs" {
   name              = "/ecs/${var.project_name}-${var.environment}"
   retention_in_days = var.log_retention_days
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-ecs-logs"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-ecs-logs"
+    Component = "CorpSite"
+  })
 }
 
 # CloudWatch Alarm for ECS task failures
@@ -26,7 +27,8 @@ resource "aws_cloudwatch_metric_alarm" "ecs_task_failures" {
     ClusterName = aws_ecs_cluster.main.name
   }
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-ecs-task-failures-alarm"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-ecs-task-failures-alarm"
+    Component = "CorpSite"
+  })
 }

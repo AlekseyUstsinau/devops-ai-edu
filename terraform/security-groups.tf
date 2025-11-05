@@ -18,9 +18,10 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-alb-sg"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-alb-sg"
+    Component = "LoadBalancer"
+  })
 }
 
 resource "aws_security_group" "ecs_tasks" {
@@ -43,7 +44,8 @@ resource "aws_security_group" "ecs_tasks" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-ecs-tasks-sg"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-ecs-tasks-sg"
+    Component = "CorpSite"
+  })
 }

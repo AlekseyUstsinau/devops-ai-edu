@@ -21,11 +21,11 @@ resource "aws_ecs_task_definition" "corp_site" {
       ]
 
       healthCheck = {
-        command     = ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:${var.container_port}/health || exit 1"]
-        interval    = 30
-        timeout     = 5
-        retries     = 3
-        startPeriod = 60
+        command     = ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:${var.container_port}${var.health_check_path} || exit 1"]
+        interval    = var.container_health_check_interval
+        timeout     = var.container_health_check_timeout
+        retries     = var.container_health_check_retries
+        startPeriod = var.container_health_check_start_period
       }
 
       logConfiguration = {

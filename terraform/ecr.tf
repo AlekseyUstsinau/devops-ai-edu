@@ -6,9 +6,10 @@ resource "aws_ecr_repository" "main" {
     scan_on_push = false
   }
 
-  tags = {
-    Name = "${var.project_name}-${var.environment}-ecr"
-  }
+  tags = merge(var.default_tags, {
+    Name      = "${var.project_name}-${var.environment}-ecr"
+    Component = "CorpSite"
+  })
 }
 
 resource "aws_ecr_lifecycle_policy" "main" {

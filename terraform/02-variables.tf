@@ -149,7 +149,7 @@ variable "health_check_interval" {
 variable "health_check_path" {
   description = "Health check path"
   type        = string
-  default     = "/"
+  default     = "/health"
 }
 
 variable "health_check_matcher" {
@@ -236,7 +236,32 @@ variable "corp_site_max_capacity" {
 }
 
 variable "corp_site_cpu_scale_threshold" {
-  description = "CPU percentage threshold for Corporate Site scaling"
+  description = "CPU percentage threshold for Corporate Site scaling (scale out when CPU > 60%)"
   type        = number
-  default     = 70
+  default     = 60
+}
+
+# Container Health Check Configuration
+variable "container_health_check_interval" {
+  description = "Container health check interval in seconds"
+  type        = number
+  default     = 30
+}
+
+variable "container_health_check_timeout" {
+  description = "Container health check timeout in seconds"
+  type        = number
+  default     = 5
+}
+
+variable "container_health_check_retries" {
+  description = "Container health check retries"
+  type        = number
+  default     = 3
+}
+
+variable "container_health_check_start_period" {
+  description = "Container health check start period in seconds"
+  type        = number
+  default     = 60
 }

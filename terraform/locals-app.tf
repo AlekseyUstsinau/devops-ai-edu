@@ -11,16 +11,16 @@ locals {
   # Container configuration
   corp_site_container = {
     name = "${local.corp_site_name_prefix}-container"
-    port = 80
+    port = var.container_port
   }
 
   # Health check configuration
   corp_site_health_check = {
-    path                = "/health"
-    healthy_threshold   = 2
-    unhealthy_threshold = 3
-    timeout             = 5
-    interval            = 30
-    matcher             = "200"
+    path                = var.health_check_path
+    healthy_threshold   = var.health_check_healthy_threshold
+    unhealthy_threshold = var.health_check_unhealthy_threshold
+    timeout             = var.health_check_timeout
+    interval            = var.health_check_interval
+    matcher             = var.health_check_matcher
   }
 }

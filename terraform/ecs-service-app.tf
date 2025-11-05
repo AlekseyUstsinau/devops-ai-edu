@@ -40,15 +40,15 @@ resource "aws_lb_target_group" "corp_site" {
   target_type = "ip"
 
   health_check {
-    enabled             = true
-    healthy_threshold   = 2
-    interval            = 30
-    matcher             = "200"
-    path                = "/health"
+    enabled             = var.health_check_enabled
+    healthy_threshold   = var.health_check_healthy_threshold
+    interval            = var.health_check_interval
+    matcher             = var.health_check_matcher
+    path                = var.health_check_path
     port                = "traffic-port"
     protocol            = "HTTP"
-    timeout             = 5
-    unhealthy_threshold = 3
+    timeout             = var.health_check_timeout
+    unhealthy_threshold = var.health_check_unhealthy_threshold
   }
 
   tags = merge(var.default_tags, {
