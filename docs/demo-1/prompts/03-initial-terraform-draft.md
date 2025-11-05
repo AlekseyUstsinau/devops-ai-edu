@@ -2,6 +2,9 @@
 
 ROLE: Senior Infrastructure Engineer.
 TASK: Produce initial Terraform code for infra ticket.
+
+SECURITY CHECK: Verify .gitignore file exists with Terraform exclusions before creating any .tf files!
+
 OUTPUT FILE STRUCTURE (STRICT):
 terraform/
   00-config.tf          # backend & required versions
@@ -23,3 +26,8 @@ CONSTRAINTS:
 - No hard-coded secrets.
 - Reasonable naming conventions.
 - Only resources directly referenced by tickets.
+- Use VPC endpoints for ECR/S3 access instead of NAT Gateway (cost optimization).
+- Do NOT create default ECS service/task until specific application requirements are defined.
+- Container ports should default to 8080 (non-privileged port).
+- Ask user for S3 backend bucket name and check if it exists.
+- If S3 backend bucket doesn't exist, provide creation steps before Terraform init.

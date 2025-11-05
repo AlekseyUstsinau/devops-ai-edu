@@ -9,9 +9,11 @@ JOBS:
 - terraform_plan: runs on PR & main pushes (depends on build), executes terraform inside terraform/ root, outputs plan artifact.
 - terraform_apply: runs only on manual approval + push to main (environment protection) or workflow_dispatch; executes terraform apply in terraform/ root.
 CONSTRAINTS:
-- Use AWS creds via secrets: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION.
+- Use AWS creds via secrets with engineer-specific variable names (e.g., AWS_ACCESS_KEY_ID_SSVERCHKOV).
+- Ask user for their specific AWS credential variable names to support multiple engineers.
 - Cache Terraform plugins & modules.
 - Post plan summary as PR comment.
 - Fail fast on lint (optional step) for Dockerfile.
 - Ensure plan/apply restricted to app-related changes (optionally detect path filter: app/** OR terraform/*ecs-*app* files).
+- Separate terraform validation pipeline should only do: format check, validate, security scan, plan (no apply).
 OUTPUT: Single YAML.
