@@ -37,8 +37,11 @@ Follow the prompts in numerical order:
 10. **[09-initial-app-code.md](./prompts/09-initial-app-code.md)** - Create application code
 11. **[10-app-cicd-pipeline.md](./prompts/10-app-cicd-pipeline.md)** - Application CI/CD pipeline
 12. **[11-app-security-refinement.md](./prompts/11-app-security-refinement.md)** - Security hardening
-13. **[12-app-variables-autoscaling.md](./prompts/12-app-variables-autoscaling.md)** - Variable expansion & autoscaling
-14. **[13-app-governance-tags.md](./prompts/13-app-governance-tags.md)** - Tag governance
+12. **[12-app-variables-autoscaling.md](./prompts/12-app-variables-autoscaling.md)** - Variable expansion & autoscaling
+13. **[13-app-governance-tags.md](./prompts/13-app-governance-tags.md)** - Tag governance
+
+#### **Cleanup Phase**
+14. **[14-infrastructure-cleanup.md](./prompts/14-infrastructure-cleanup.md)** - Infrastructure cleanup & lessons learned
 
 ## 🎯 Learning Objectives
 
@@ -86,6 +89,31 @@ The final infrastructure includes:
 - **Follow security best practices** - never commit credentials to git
 - **Use validation pipeline** for all infrastructure changes
 - **Test locally** before deploying to AWS
+- **Mind AWS naming limits** - ALB Target Groups, ECS Autoscaling targets have 32-character limits
+
+## ⚠️ AWS Resource Naming Limitations
+
+During implementation, we discovered several AWS resources have strict naming limitations:
+
+### 32-Character Limits
+- **ALB Target Groups**: Names must be ≤32 characters
+- **ECS Autoscaling Targets**: Resource names have length restrictions
+- **Security Groups**: Consider using `name_prefix` for uniqueness
+
+### Examples
+```hcl
+# ❌ This exceeds 32 characters (46 characters):
+"${var.project_name}-${var.environment}-corp-site-autoscaling-target"
+
+# ✅ Better approach using shortened names:
+name = "corp-website-${var.environment}-tg"  # 22 characters
+```
+
+### Best Practices
+1. **Keep base names short**: Use abbreviations (`tg`, `sg`, `svc`)
+2. **Use name_prefix**: For resources needing uniqueness
+3. **Calculate lengths**: Test full interpolated names before deployment
+4. **Document limits**: Add character restriction comments in Terraform
 
 ## 🆘 Troubleshooting
 

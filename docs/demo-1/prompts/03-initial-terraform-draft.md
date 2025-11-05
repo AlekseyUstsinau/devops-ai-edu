@@ -24,7 +24,8 @@ CONSTRAINTS:
 - Use region variable with default us-east-1.
 - Keep variables minimal first (expand later).
 - No hard-coded secrets.
-- Reasonable naming conventions.
+- Reasonable naming conventions with AWS resource limits in mind.
+- **CRITICAL**: ALB Target Groups, ECS Autoscaling targets have 32-character name limits - use abbreviations (tg, sg, svc).
 - Only resources directly referenced by tickets.
 - Use VPC endpoints for ECR/S3 access instead of NAT Gateway (cost optimization).
 - Do NOT create default ECS service/task until specific application requirements are defined.
