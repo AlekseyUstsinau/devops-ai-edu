@@ -72,8 +72,7 @@ jobs:
       - name: 'Run tfsec Security Scan'
         run: |
           echo "Starting tfsec security scan..."
-          tfsec . --format json --out tfsec-results.json || echo "tfsec JSON scan completed with findings"
-          tfsec . --format table --out tfsec-summary.txt || echo "tfsec table scan completed with findings"
+          tfsec . > tfsec-summary.txt || echo "tfsec scan completed with findings"
           echo "Security scan completed. Files created:"
           ls -la tfsec-*.* || echo "No tfsec files found"
         working-directory: terraform
@@ -90,12 +89,6 @@ jobs:
           else
             echo "No tfsec-summary.txt file found"
           fi
-          if [ -f tfsec-results.json ]; then
-            echo "=== JSON Results Size ==="
-            wc -l tfsec-results.json
-          else
-            echo "No tfsec-results.json file found"
-          fi
         working-directory: terraform
         continue-on-error: true
 
@@ -104,9 +97,7 @@ jobs:
         if: always()
         with:
           name: tfsec-security-results
-          path: |
-            terraform/tfsec-results.json
-            terraform/tfsec-summary.txt
+          path: terraform/tfsec-summary.txt
           retention-days: 30
 
   terraform-plan:
