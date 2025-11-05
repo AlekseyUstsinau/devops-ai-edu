@@ -86,7 +86,7 @@ variable "log_retention_days" {
 variable "container_port" {
   description = "Port number for the container"
   type        = number
-  default     = 80
+  default     = 8080
 }
 
 variable "container_image_tag" {

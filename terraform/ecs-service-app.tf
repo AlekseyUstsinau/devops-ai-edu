@@ -14,7 +14,7 @@ resource "aws_ecs_service" "corp_site" {
   load_balancer {
     target_group_arn = aws_lb_target_group.corp_site.arn
     container_name   = "corp-website-${var.environment}-container"
-    container_port   = 8080
+    container_port   = var.container_port
   }
 
   depends_on = [
@@ -34,7 +34,7 @@ resource "aws_ecs_service" "corp_site" {
 # Target Group for Corporate Site
 resource "aws_lb_target_group" "corp_site" {
   name        = "corp-website-${var.environment}-tg"
-  port        = 8080
+  port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
