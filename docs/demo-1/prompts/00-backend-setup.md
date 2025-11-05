@@ -9,57 +9,32 @@ PREREQUISITES: Ensure user has completed setup from ../PREREQUISITES.md (AWS CLI
 
 PREREQUISITES CHECK:
 1. Confirm .gitignore file includes Terraform state files (*.tfstate, .terraform/, etc.)
-2. Ask user for S3 bucket name for Terraform state storage.
-3. Check if the S3 bucket exists using AWS CLI.
-4. If bucket doesn't exist, provide creation steps.
+2. Ask user for S3 bucket name for Terraform state storage
+3. Ask user for preferred AWS region for backend resources
+4. Ask user for DynamoDB table name for state locking (suggest: terraform-state-lock)
+5. Check if the S3 bucket and DynamoDB table exist using AWS CLI
+6. If resources don't exist, provide creation commands
 
-BACKEND SETUP STEPS (if bucket doesn't exist):
-```bash
-# 1. Create S3 bucket for Terraform state
-aws s3 mb s3://YOUR-TERRAFORM-STATE-BUCKET --region us-east-1
+BACKEND SETUP REQUIREMENTS:
+- S3 bucket with versioning enabled
+- Server-side encryption (AES256)
+- Public access blocked
+- DynamoDB table for state locking
+- Consistent region for all backend resources
 
-# 2. Enable versioning
-aws s3api put-bucket-versioning \
-  --bucket YOUR-TERRAFORM-STATE-BUCKET \
-  --versioning-configuration Status=Enabled
-
-# 3. Enable server-side encryption
-aws s3api put-bucket-encryption \
-  --bucket YOUR-TERRAFORM-STATE-BUCKET \
-  --server-side-encryption-configuration '{
-    "Rules": [
-      {
-        "ApplyServerSideEncryptionByDefault": {
-          "SSEAlgorithm": "AES256"
-        }
-      }
-    ]
-  }'
-
-# 4. Block public access
-aws s3api put-public-access-block \
-  --bucket YOUR-TERRAFORM-STATE-BUCKET \
-  --public-access-block-configuration \
-  "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
-
-# 5. Create DynamoDB table for state locking
-aws dynamodb create-table \
-  --table-name terraform-state-lock \
-  --attribute-definitions AttributeName=LockID,AttributeType=S \
-  --key-schema AttributeName=LockID,KeyType=HASH \
-  --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
-  --region us-east-1
-```
-
-VERIFICATION:
+VERIFICATION STEPS:
 - Confirm bucket and DynamoDB table creation
 - Test terraform init with backend configuration
-- Verify state file is stored in S3
+- Verify state file is stored in S3 with proper encryption
 
 CONSTRAINTS:
 - Use consistent naming convention for bucket
-- Enable versioning and encryption
-- Block all public access
-- Create DynamoDB table for state locking
+- Enable versioning and encryption for S3
+- Block all public access on S3 bucket
+- Create DynamoDB table in same region as S3 bucket
+- Use minimal provisioned capacity for DynamoDB (1 read, 1 write)
 
-OUTPUT: Step-by-step verification and creation commands if needed.
+OUTPUT: 
+- Step-by-step AWS CLI commands for resource creation (if needed)
+- Backend configuration block for terraform
+- Verification commands to confirm setup
