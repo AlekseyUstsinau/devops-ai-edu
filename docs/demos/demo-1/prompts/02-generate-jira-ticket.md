@@ -16,3 +16,5 @@ References: Original email, assumptions.
 QUALITY RULES:
 - Each AC must be testable.
 - No speculative items outside provided context.
+
+Save it as markdown document under ./docs folder
