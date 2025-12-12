@@ -12,28 +12,19 @@ Generate **ALL** pipeline code using AI. Manual coding is only allowed for:
 
 ## 🎯 Your Task
 
-### 1️⃣ Infrastructure CI/CD
+### 1️⃣ Infrastructure CI/CD Pipeline
 
-- 🔄 Automated terraform plan on pull requests
-- ✅ Automated terraform apply on merge to main
-- 🔍 Drift detection and alerts
-- 💰 Cost estimation in PR comments
-- 🔐 Security scanning (tfsec, checkov, or similar)
-
-### 2️⃣ Application Deployment Pipeline (choose one sample app)
-
-- 🏗️ Build and test automation
-- 📦 Container image building and scanning
-- 🚢 Automated deployment to Kubernetes/ECS/App Service
-- 🎯 Blue-green or canary deployment strategy
-- ⏪ Automated rollback on failure
-
-### 3️⃣ Pipeline Requirements
-
+- 🔄 Automated terraform plan
+- ✅ Automated terraform apply
 - ⚙️ Use GitHub Actions, GitLab CI, or similar
 - 🔑 Implement proper secrets management
 - 👮 Add approval gates for production
-- 🧪 Include automated testing (unit, integration)
+
+### 2️⃣ Optional Enhancements
+
+- 🔐 Security scanning (tfsec, checkov, or similar)
+- 💰 Cost estimation in PR comments
+- 🧪 Include automated testing
 - 📢 Set up notifications (Slack/email)
 
 ---

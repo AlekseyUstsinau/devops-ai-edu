@@ -1,85 +1,36 @@
-# 🤖 Phase 4: Advanced AI Challenge
+# 🔧 Phase 4: Code Optimization, Security & Cost Improvements
 
-## ⚠️ Constraint
+## 🎯 Objective
 
-Choose **ONE** of the following advanced tasks and implement it using AI assistance.
-
----
-
-## 🎯 Option A: AI-Powered Incident Response System
-
-Build an intelligent incident response system that:
-
-- 📊 Monitors infrastructure and application logs
-- 🤖 Uses AI to classify and triage incidents automatically
-- 📖 Generates runbooks dynamically based on incident type
-- 📝 Creates initial incident reports with root cause hypothesis
-- 💡 Suggests remediation steps based on historical data
-
-### Technical Requirements:
-
-- ✅ Integrate with your monitoring stack
-- 🧠 Use AI APIs (Claude, OpenAI, etc.) for analysis
-- 💾 Store incident history in a database
-- 🖥️ Create a simple UI or Slack bot interface
-- 🔄 Implement feedback loop to improve AI suggestions
+Use AI to analyze and improve your Terraform infrastructure from Tasks 1-3, focusing on: **Code Quality**, **Security**, and **Cost Optimization**.
 
 ---
 
-## 🎯 Option B: Infrastructure Optimization Agent
+## 📋 What You Need to Do
 
-Create an AI agent that:
+Use AI assistance to review and enhance your infrastructure across three areas:
 
-- 📈 Analyzes your infrastructure usage patterns
-- 🔍 Identifies optimization opportunities (rightsizing, reserved instances, etc.)
-- 🏗️ Generates Terraform code changes for optimizations
-- 💰 Estimates cost savings
-- 🔀 Creates pull requests with proposed changes
+### 🚀 1. Code Optimization
+Analyze and improve your Terraform code quality and performance.
 
-### Technical Requirements:
+### 🔒 2. Security Hardening
+Identify and fix security vulnerabilities. Apply security best practices.
 
-- 📊 Pull metrics from cloud provider APIs
-- 🤖 Use AI for analysis and code generation
-- ⚠️ Implement safety checks before suggesting changes
-- 📉 Create visualization of potential savings
-- 📝 Document decision-making process
+### 💰 3. Cost Optimization
+Analyze and reduce infrastructure costs. Calculate estimated savings.
 
 ---
 
-## 🎯 Option C: Self-Healing Infrastructure with AI
+## 📊 Deliverables
 
-Build a system that:
+1. **Improved Terraform Code**
+   - Refactored modules with clear improvements
 
-- 🔍 Detects infrastructure anomalies and failures
-- 🧠 Uses AI to diagnose root causes
-- 🔧 Automatically generates and executes remediation plans
-- 📚 Learns from past incidents to improve responses
-- 📋 Maintains audit log of all automated actions
+2. **Improvement Report** (markdown)
+   - Summary of changes in each category
+   - Security vulnerabilities fixed
 
-### Technical Requirements:
-
-- 🔔 Integrate with monitoring and alerting systems
-- 🛡️ Implement safe automation with approval thresholds
-- 🤖 Use AI for diagnostics and decision-making
-- ⏪ Create rollback mechanisms
-- 📝 Include comprehensive logging and alerting
+3. **Implementation Guide**
+   - Step-by-step changes made
 
 ---
-
-## 🎯 Option D: AI-Assisted Compliance and Security Auditor
-
-Develop a tool that:
-
-- 🔍 Continuously scans infrastructure for compliance violations
-- 📖 Uses AI to interpret compliance frameworks (SOC 2, GDPR, HIPAA)
-- 📊 Generates human-readable compliance reports
-- 🔧 Suggests remediation with specific Terraform changes
-- 📈 Tracks compliance score over time
-
-### Technical Requirements:
-
-- ☁️ Integrate with cloud provider APIs
-- 📜 Use policy-as-code tools (OPA, Sentinel)
-- 🧠 Leverage AI for natural language policy interpretation
-- 📊 Create dashboard showing compliance status
-- 🔀 Generate automated remediation PRs

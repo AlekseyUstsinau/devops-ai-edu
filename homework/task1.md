@@ -2,7 +2,7 @@
 
 ## 📋 Project Overview
 
-Design and deploy a complete production-ready infrastructure using AI assistance while maintaining best practices.
+Design and deploy infrastructure for a staging environment using AI assistance while maintaining best practices.
 
 ---
 
@@ -10,35 +10,39 @@ Design and deploy a complete production-ready infrastructure using AI assistance
 
 ### 💼 Business Requirements
 
-Your company is building a **POC (Proof of Concept)** for a new multi-tenant SaaS platform with the following requirements:
+The following email represents the initial requirement:
 
-| Category | Requirement |
-|----------|-------------|
-| **🏗️ Application Stack** | Simple microservices architecture (2-3 services) |
-| **📊 Expected Traffic** | 100-500 daily active users for testing, scalable design for future growth |
-| **💾 Data Requirements** | Small transactional database, basic caching, object storage for user uploads |
-| **🔒 Security** | Basic security best practices, encryption at rest and in transit |
-| **⚡ Availability** | Single-AZ deployment with documented multi-AZ migration path |
-| **📈 Monitoring** | Basic monitoring (CloudWatch or equivalent free tier tools) |
-| **💰 Cost Constraint** | POC budget (minimal, utilizing free tiers where possible) |
+```
+Subject: Quick staging environment for a simple service
 
+Hi team,
+
+We need to quickly stand up a temporary staging environment for a small service. 
+It must be highly available and support horizontal scaling. Keep costs low (use 
+free tier where possible) and implement an automatic stop during nights to save 
+money. This is for short-lived testing and should be easy to tear down.
+
+Please provision infrastructure in AWS and add a CI/CD pipeline that can deploy 
+updates. Prioritize reliability and low cost.
+
+Thanks,
+Manager
+```
 ---
 
 ### 🎯 Your Task
 
-Using AI assistance (Copilot, Claude, ChatGPT, or similar), create a comprehensive architecture document including:
+Using AI assistance (Copilot, Claude, ChatGPT, or similar), work with AI to design the architecture. Through conversation with AI, create:
 
-1. **📐 High-level architecture diagram**
-2. **🔧 Component selection** with justification (compute, database, networking, security)
-3. **🔄 Disaster recovery and backup strategy**
-4. **📈 Scaling strategy** (horizontal/vertical)
-5. **🛡️ Security architecture** (IAM, network segmentation, secrets management)
-6. **💵 Cost estimation** and optimization opportunities
+1. **📐 Architecture diagram** showing all components
+2. **🔧 Document with tool selection** and justification
+3. **⚙️ List of all infrastructure parameters** needed for Terraform (e.g., instance types, counts, storage sizes, etc.)
+4. **💵 Cost estimation** based on your parameters
 
 ---
 
 ### 📦 Deliverables
 
-- [ ] **Architecture document** (PDF/Markdown)
-- [ ] **Architecture diagram** (draw.io, Lucidchart, or similar)
-- [ ] **Bill of materials** with estimated costs
+- [ ] **Architecture diagram**
+- [ ] **Architecture document** with tool selection and all parameters
+- [ ] **Cost estimation**

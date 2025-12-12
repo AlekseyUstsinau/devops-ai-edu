@@ -12,20 +12,14 @@ Generate **ALL** Terraform code using AI. Manual coding is only allowed for:
 
 ## 🎯 Your Task
 
-### 1️⃣ Develop a Prompting Strategy
-
-- 📋 Document your approach to prompting AI for infrastructure code
-- 💡 Include example prompts that worked well and those that didn't
-- 🔄 Explain how you iterated on prompts to improve output
-
-### 2️⃣ Generate Terraform Infrastructure
+### 1️⃣ Generate Terraform Infrastructure
 
 - 🧩 Use AI to generate modular Terraform code for your architecture
 - 💾 Implement proper state management (remote backend)
 - ✅ Follow Terraform best practices (modules, variables, outputs)
 - 🌍 Include environment separation (dev/staging/prod)
 
-### 3️⃣ Code Quality Requirements
+### 2️⃣ Code Quality Requirements
 
 - 🏷️ All resources must have appropriate tags
 - 🔐 Implement least-privilege IAM policies
@@ -38,6 +32,5 @@ Generate **ALL** Terraform code using AI. Manual coding is only allowed for:
 ## 📦 Deliverables
 
 - [ ] **Complete Terraform codebase** (organized in modules)
-- [ ] **Prompting strategy document**
 - [ ] **README** with deployment instructions
 - [ ] **terraform.tfvars.example** files
