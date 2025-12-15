@@ -1,36 +1,35 @@
 # 🔧 Phase 4: Code Optimization, Security & Cost Improvements
 
-## 🎯 Objective
+## ⚠️ Constraint
 
-Use AI to analyze and improve your Terraform infrastructure from Tasks 1-3, focusing on: **Code Quality**, **Security**, and **Cost Optimization**.
+Generate **ALL** improvements using AI. Manual coding is only allowed for:
+
+- ❌ Fixing syntax errors AI cannot resolve
+- 🔧 Adjusting AI-generated configurations that don't meet requirements
+- 📝 Creating improvement documentation
 
 ---
 
-## 📋 What You Need to Do
+## 🎯 Your Task
 
-Use AI assistance to review and enhance your infrastructure across three areas:
+### 1️⃣ Code Optimization
 
-### 🚀 1. Code Optimization
 Analyze and improve your Terraform code quality and performance.
 
-### 🔒 2. Security Hardening
+### 2️⃣ Security Hardening
+
 Identify and fix security vulnerabilities. Apply security best practices.
 
-### 💰 3. Cost Optimization
+### 3️⃣ Cost Optimization
+
 Analyze and reduce infrastructure costs. Calculate estimated savings.
 
 ---
 
-## 📊 Deliverables
+## 📦 Deliverables
 
-1. **Improved Terraform Code**
-   - Refactored modules with clear improvements
-
-2. **Improvement Report** (markdown)
-   - Summary of changes in each category
-   - Security vulnerabilities fixed
-
-3. **Implementation Guide**
-   - Step-by-step changes made
+- [ ] **Improved Terraform Code** (refactored modules with clear improvements)
+- [ ] **Improvement Report** (markdown with summary of changes in each category and security vulnerabilities fixed)
+- [ ] **Cost Optimization Report** (comparison with original cost estimation from Task 1, cost improvements achieved, and estimated savings breakdown)
 
 ---

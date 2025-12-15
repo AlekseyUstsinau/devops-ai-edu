@@ -16,15 +16,12 @@ Generate **ALL** pipeline code using AI. Manual coding is only allowed for:
 
 - 🔄 Automated terraform plan
 - ✅ Automated terraform apply
-- ⚙️ Use GitHub Actions, GitLab CI, or similar
-- 🔑 Implement proper secrets management
-- 👮 Add approval gates for production
+- ⚙️ Use GitHub Actions
 
 ### 2️⃣ Optional Enhancements
 
 - 🔐 Security scanning (tfsec, checkov, or similar)
-- 💰 Cost estimation in PR comments
-- 🧪 Include automated testing
+- 🧪 Automated Terraform validation
 - 📢 Set up notifications (Slack/email)
 
 ---
@@ -32,5 +29,4 @@ Generate **ALL** pipeline code using AI. Manual coding is only allowed for:
 ## 📦 Deliverables
 
 - [ ] **CI/CD configuration files**
-- [ ] **Documentation of pipeline stages**
-- [ ] **Example of successful pipeline run** (screenshots/logs)
+- [ ] **Link to successful GitHub Actions job run**
