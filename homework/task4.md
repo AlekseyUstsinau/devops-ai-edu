@@ -22,7 +22,7 @@ Identify and fix security vulnerabilities. Apply security best practices.
 
 ### 3️⃣ Cost Optimization
 
-Analyze and reduce infrastructure costs. Calculate estimated savings.
+Analyze infrastructure costs and identify opportunities for reduction. Calculate the total cost and estimate potential savings.
 
 ---
 
@@ -30,6 +30,6 @@ Analyze and reduce infrastructure costs. Calculate estimated savings.
 
 - [ ] **Improved Terraform Code** (refactored modules with clear improvements)
 - [ ] **Improvement Report** (markdown with summary of changes in each category and security vulnerabilities fixed)
-- [ ] **Cost Optimization Report** (comparison with original cost estimation from Task 1, cost improvements achieved, and estimated savings breakdown)
+- [ ] **Cost Report**
 
 ---

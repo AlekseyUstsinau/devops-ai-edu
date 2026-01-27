@@ -33,4 +33,3 @@ Generate **ALL** Terraform code using AI. Manual coding is only allowed for:
 
 - [ ] **Complete Terraform codebase** (organized in modules)
 - [ ] **README** with deployment instructions
-- [ ] **terraform.tfvars.example** files
