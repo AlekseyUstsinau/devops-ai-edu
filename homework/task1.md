@@ -37,7 +37,6 @@ Using AI assistance (Copilot, Claude, ChatGPT, or similar), work with AI to desi
 1. **📐 Architecture diagram** showing all components
 2. **🔧 Document with tool selection** and justification
 3. **⚙️ List of all infrastructure parameters** needed for Terraform (e.g., instance types, counts, storage sizes, etc.)
-4. **💵 Cost estimation** based on your parameters
 
 ---
 
@@ -45,4 +44,3 @@ Using AI assistance (Copilot, Claude, ChatGPT, or similar), work with AI to desi
 
 - [ ] **Architecture diagram**
 - [ ] **Architecture document** with tool selection and all parameters
-- [ ] **Cost estimation**
