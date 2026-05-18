@@ -1,0 +1,25 @@
+name: Production Terraform apply
+
+on:
+  push:
+    branches: [main]
+    paths: ["terraform/**"]
+
+jobs:
+  prod-apply:
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      environment: prod
+      run_plan: false
+      run_apply: true
+    secrets:
+      AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      TF_BACKEND_BUCKET: ${{ secrets.TF_BACKEND_BUCKET }}
+      TF_BACKEND_KEY: ${{ secrets.TF_BACKEND_KEY }}
+      TF_BACKEND_REGION: ${{ secrets.TF_BACKEND_REGION }}
+      TF_BACKEND_DYNAMODB_TABLE: ${{ secrets.TF_BACKEND_DYNAMODB_TABLE }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
