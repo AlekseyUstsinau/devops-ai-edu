@@ -1,0 +1,51 @@
+At line:486 char:1
++ }
++ ~
+Unexpected token '}' in expression or statement.
+At line:487 char:10
++ foreach ( in .Keys) { Set-Content -Path  -Value [] -Encoding utf8 }
++          ~
+Missing variable name after foreach.
+At line:487 char:19
++ foreach ( in .Keys) { Set-Content -Path  -Value [] -Encoding utf8 }
++                   ~
+Unexpected token ')' in expression or statement.
+At line:488 char:163
++ ... Item 'c:\Users\a.ustsinau\devops-ai-edu\terraform\write_tf_files.ps1'
++                                                                         ~
+The string is missing the terminator: '.
+At line:488 char:23
++ ... ng utf8; & 'c:\Users\a.ustsinau\devops-ai-edu\terraform\write_tf_file ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Unexpected token 
+'c:\Users\a.ustsinau\devops-ai-edu\terraform\write_tf_files.ps1'; Remove-Item 
+'c:\Users\a.ustsinau\devops-ai-edu\terraform\write_tf_files.ps1'' in 
+expression or statement.
+At line:61 char:3
++   'c:\Users\a.ustsinau\devops-ai-edu\terraform\variables.tf' = @'
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The assignment expression is not valid. The input to an assignment operator 
+must be an object that is able to accept assignments, such as a variable or a 
+property.
+At line:249 char:3
++   'c:\Users\a.ustsinau\devops-ai-edu\terraform\modules\azure_containe ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The assignment expression is not valid. The input to an assignment operator 
+must be an object that is able to accept assignments, such as a variable or a 
+property.
+At line:361 char:3
++   'c:\Users\a.ustsinau\devops-ai-edu\terraform\modules\azure_containe ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The assignment expression is not valid. The input to an assignment operator 
+must be an object that is able to accept assignments, such as a variable or a 
+property.
+At line:465 char:3
++   'c:\Users\a.ustsinau\devops-ai-edu\terraform\modules\azure_containe ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The assignment expression is not valid. The input to an assignment operator 
+must be an object that is able to accept assignments, such as a variable or a 
+property.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordEx 
+   ception
+    + FullyQualifiedErrorId : UnexpectedToken
+ 
