@@ -30,7 +30,7 @@ variable "azs" {
 
 variable "create_nat_gateway" {
   type        = bool
-  description = "Whether to create NAT gateways for private subnet egress."
+  description = "Whether to create a single NAT gateway for private subnet outbound access."
 }
 
 variable "tags" {

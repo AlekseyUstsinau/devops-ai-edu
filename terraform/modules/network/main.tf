@@ -2,6 +2,7 @@ resource "aws_vpc" "this" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
+
   tags = merge(var.tags, {
     Name = "${var.project_name}-${var.environment}-vpc"
   })
@@ -41,23 +42,23 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_eip" "nat" {
-  for_each = var.create_nat_gateway ? aws_subnet.public : {}
+  count = var.create_nat_gateway ? 1 : 0
 
   domain = "vpc"
 
   tags = merge(var.tags, {
-    Name = "${var.project_name}-${var.environment}-nat-${each.key}"
+    Name = "${var.project_name}-${var.environment}-nat-0"
   })
 }
 
 resource "aws_nat_gateway" "this" {
-  for_each = var.create_nat_gateway ? aws_subnet.public : {}
+  count = var.create_nat_gateway ? 1 : 0
 
-  allocation_id = aws_eip.nat[each.key].id
-  subnet_id     = each.value.id
+  allocation_id = aws_eip.nat[0].id
+  subnet_id     = aws_subnet.public[0].id
 
   tags = merge(var.tags, {
-    Name = "${var.project_name}-${var.environment}-nat-${each.key}"
+    Name = "${var.project_name}-${var.environment}-nat-0"
   })
 }
 
@@ -75,17 +76,17 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table" "private" {
-  for_each = aws_subnet.private
+  count = var.create_nat_gateway ? 1 : 0
 
   vpc_id = aws_vpc.this.id
 
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.this[each.key].id
+    nat_gateway_id = aws_nat_gateway.this[0].id
   }
 
   tags = merge(var.tags, {
-    Name = "${var.project_name}-${var.environment}-private-rt-${each.key}"
+    Name = "${var.project_name}-${var.environment}-private-rt"
   })
 }
 
@@ -97,8 +98,8 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_route_table_association" "private" {
-  for_each = aws_subnet.private
+  for_each = var.create_nat_gateway ? aws_subnet.private : {}
 
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.private[each.key].id
+  route_table_id = aws_route_table.private[0].id
 }

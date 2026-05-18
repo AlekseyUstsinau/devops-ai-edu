@@ -1,3 +1,7 @@
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 module "network" {
   source               = "./modules/network"
   project_name         = var.project_name
@@ -34,28 +38,33 @@ module "storage" {
   project_name       = var.project_name
   environment        = local.environment
   bucket_name_prefix = var.bucket_name_prefix
+  enable_kms         = var.bucket_enable_kms
   tags               = local.common_tags
 }
 
 module "compute" {
-  source                  = "./modules/compute"
-  project_name            = var.project_name
-  environment             = local.environment
-  application_name        = var.application_name
-  app_container_image     = var.app_container_image
-  app_cpu                 = var.app_cpu
-  app_memory              = var.app_memory
-  app_desired_count       = var.app_desired_count
-  app_port                = var.app_port
-  cluster_name            = "${var.project_name}-${local.environment}-ecs-cluster"
-  service_name            = "${var.project_name}-${local.environment}-ecs-service"
-  aws_region              = var.aws_region
-  vpc_id                  = module.network.vpc_id
-  subnet_ids              = module.network.private_subnet_ids
-  alb_security_group_id   = module.security.alb_security_group_id
-  ecs_security_group_id   = module.security.ecs_security_group_id
-  task_execution_role_arn = module.iam.ecs_task_execution_role_arn
-  task_role_arn           = module.iam.ecs_task_role_arn
-  tags                    = local.common_tags
+  source                     = "./modules/compute"
+  project_name               = var.project_name
+  environment                = local.environment
+  application_name           = var.application_name
+  app_container_image        = var.app_container_image
+  app_cpu                    = var.app_cpu
+  app_memory                 = var.app_memory
+  app_min_count              = var.app_desired_count
+  app_max_count              = var.app_max_count
+  app_target_cpu_utilization = var.app_target_cpu_utilization
+  app_port                   = var.app_port
+  health_check_path          = var.app_health_check_path
+  log_retention_days         = var.log_retention_days
+  cluster_name               = "${var.project_name}-${local.environment}-ecs-cluster"
+  service_name               = "${var.project_name}-${local.environment}-ecs-service"
+  aws_region                 = var.aws_region
+  vpc_id                     = module.network.vpc_id
+  subnet_ids                 = module.network.private_subnet_ids
+  alb_security_group_id      = module.security.alb_security_group_id
+  ecs_security_group_id      = module.security.ecs_security_group_id
+  task_execution_role_arn    = module.iam.ecs_task_execution_role_arn
+  task_role_arn              = module.iam.ecs_task_role_arn
+  tags                       = local.common_tags
 }
 

@@ -50,8 +50,8 @@ variable "application_name" {
 
 variable "app_container_image" {
   type        = string
-  default     = "public.ecr.aws/nginx/nginx:latest"
-  description = "Container image used by the ECS task."
+  default     = "public.ecr.aws/nginx/nginx:1.26.0"
+  description = "Container image used by the ECS task. Fixed image versions reduce drift and security risk."
   validation {
     condition     = length(trimspace(var.app_container_image)) > 0
     error_message = "app_container_image cannot be empty."
@@ -80,8 +80,8 @@ variable "app_memory" {
 
 variable "app_desired_count" {
   type        = number
-  default     = 2
-  description = "Number of ECS tasks to maintain."
+  default     = 1
+  description = "Minimum number of ECS tasks to maintain."
   validation {
     condition     = var.app_desired_count >= 1 && var.app_desired_count <= 10
     error_message = "app_desired_count must be between 1 and 10."
@@ -95,6 +95,42 @@ variable "app_port" {
   validation {
     condition     = var.app_port > 0 && var.app_port <= 65535
     error_message = "app_port must be a valid port number."
+  }
+}
+
+variable "app_max_count" {
+  type        = number
+  default     = 3
+  description = "Maximum number of ECS tasks allowed by autoscaling."
+  validation {
+    condition     = var.app_max_count >= var.app_desired_count && var.app_max_count <= 10
+    error_message = "app_max_count must be between app_desired_count and 10."
+  }
+}
+
+variable "app_target_cpu_utilization" {
+  type        = number
+  default     = 60
+  description = "Target CPU utilization for ECS autoscaling."
+  validation {
+    condition     = var.app_target_cpu_utilization >= 40 && var.app_target_cpu_utilization <= 80
+    error_message = "app_target_cpu_utilization must be between 40 and 80."
+  }
+}
+
+variable "app_health_check_path" {
+  type        = string
+  default     = "/"
+  description = "Health check path used by the load balancer target group."
+}
+
+variable "log_retention_days" {
+  type        = number
+  default     = 30
+  description = "CloudWatch Logs retention period for ECS task logs."
+  validation {
+    condition     = var.log_retention_days >= 7 && var.log_retention_days <= 3650
+    error_message = "log_retention_days must be between 7 and 3650."
   }
 }
 
@@ -130,18 +166,18 @@ variable "private_subnet_cidrs" {
 
 variable "allowed_cidr_blocks" {
   type        = list(string)
-  default     = ["0.0.0.0/0"]
-  description = "CIDR blocks allowed to access the application load balancer."
+  default     = []
+  description = "CIDR blocks allowed to access the application load balancer. Must be explicitly configured for production."
   validation {
     condition     = length(var.allowed_cidr_blocks) > 0
-    error_message = "allowed_cidr_blocks must contain at least one CIDR."
+    error_message = "allowed_cidr_blocks must contain at least one CIDR block. Avoid 0.0.0.0/0 for production."
   }
 }
 
 variable "create_nat_gateway" {
   type        = bool
   default     = true
-  description = "Create NAT gateways for private subnet outbound access."
+  description = "Create a single NAT gateway for private subnet outbound access."
 }
 
 variable "ecr_repository_name" {
@@ -162,6 +198,12 @@ variable "bucket_name_prefix" {
     condition     = length(trimspace(var.bucket_name_prefix)) > 0
     error_message = "bucket_name_prefix cannot be empty."
   }
+}
+
+variable "bucket_enable_kms" {
+  type        = bool
+  default     = false
+  description = "Enable KMS encryption for the application artifact bucket."
 }
 
 variable "azure_subscription_id" {

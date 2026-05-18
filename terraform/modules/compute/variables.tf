@@ -38,14 +38,34 @@ variable "app_memory" {
   description = "Memory in MiB for the ECS task."
 }
 
-variable "app_desired_count" {
+variable "app_min_count" {
   type        = number
-  description = "Desired number of ECS tasks to run."
+  description = "Minimum number of ECS tasks to run."
+}
+
+variable "app_max_count" {
+  type        = number
+  description = "Maximum number of ECS tasks allowed by autoscaling."
+}
+
+variable "app_target_cpu_utilization" {
+  type        = number
+  description = "Target CPU utilization for ECS autoscaling."
 }
 
 variable "app_port" {
   type        = number
   description = "Application port used by ECS containers and target group."
+}
+
+variable "health_check_path" {
+  type        = string
+  description = "Health check path used by the load balancer target group."
+}
+
+variable "log_retention_days" {
+  type        = number
+  description = "CloudWatch log retention period for ECS task logs."
 }
 
 variable "vpc_id" {

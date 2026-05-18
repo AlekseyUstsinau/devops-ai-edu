@@ -1,6 +1,6 @@
 resource "aws_security_group" "alb" {
   name        = "${var.project_name}-${var.environment}-alb-sg"
-  description = "Allow inbound HTTP traffic for the application load balancer."
+  description = "Allow ingress traffic from approved CIDR blocks to the application load balancer."
   vpc_id      = var.vpc_id
 
   tags = merge(var.tags, {
@@ -40,12 +40,32 @@ resource "aws_security_group_rule" "ecs_ingress" {
   description              = "Allow traffic from ALB to ECS tasks."
 }
 
-resource "aws_security_group_rule" "ecs_egress" {
+resource "aws_security_group_rule" "ecs_egress_https" {
   type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.ecs.id
-  description       = "Allow ECS tasks to initiate outbound connections."
+  description       = "Allow ECS tasks to reach HTTPS destinations."
+}
+
+resource "aws_security_group_rule" "ecs_egress_dns_tcp" {
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.ecs.id
+  description       = "Allow ECS tasks to perform DNS lookups over TCP."
+}
+
+resource "aws_security_group_rule" "ecs_egress_dns_udp" {
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "udp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.ecs.id
+  description       = "Allow ECS tasks to perform DNS lookups over UDP."
 }

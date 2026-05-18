@@ -31,11 +31,12 @@ resource "aws_lb_target_group" "this" {
   target_type = "ip"
 
   health_check {
-    path                = "/"
+    path                = var.health_check_path
     matcher             = "200-399"
     interval            = 30
     healthy_threshold   = 2
     unhealthy_threshold = 5
+    timeout             = 5
   }
 
   tags = merge(var.tags, {
@@ -56,7 +57,7 @@ resource "aws_lb_listener" "this" {
 
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/ecs/${var.project_name}-${var.environment}"
-  retention_in_days = 14
+  retention_in_days = var.log_retention_days
 
   tags = merge(var.tags, {
     Name = "${var.project_name}-${var.environment}-log-group"
@@ -104,7 +105,7 @@ resource "aws_ecs_service" "this" {
   name            = var.service_name
   cluster         = aws_ecs_cluster.this.id
   launch_type     = "FARGATE"
-  desired_count   = var.app_desired_count
+  desired_count   = var.app_min_count
   task_definition = aws_ecs_task_definition.this.arn
 
   network_configuration {
@@ -119,9 +120,38 @@ resource "aws_ecs_service" "this" {
     container_port   = var.app_port
   }
 
+  deployment_minimum_healthy_percent = 50
+  deployment_maximum_percent         = 200
+  propagate_tags                     = "SERVICE"
+
   depends_on = [aws_lb_listener.this]
 
   tags = merge(var.tags, {
     Name = "${var.project_name}-${var.environment}-ecs-service"
   })
+}
+
+resource "aws_appautoscaling_target" "ecs_service" {
+  max_capacity       = var.app_max_count
+  min_capacity       = var.app_min_count
+  resource_id        = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.this.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "cpu_target" {
+  name               = "${var.project_name}-${var.environment}-cpu-autoscale"
+  service_namespace  = "ecs"
+  resource_id        = aws_appautoscaling_target.ecs_service.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_service.scalable_dimension
+  policy_type        = "TargetTrackingScaling"
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+    target_value       = var.app_target_cpu_utilization
+    scale_in_cooldown  = 180
+    scale_out_cooldown = 180
+  }
 }
