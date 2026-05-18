@@ -164,6 +164,18 @@ variable "bucket_name_prefix" {
   }
 }
 
+variable "azure_subscription_id" {
+  type        = string
+  default     = ""
+  description = "Azure subscription ID used for Terraform Azure resources."
+}
+
+variable "azure_tenant_id" {
+  type        = string
+  default     = ""
+  description = "Azure tenant ID used for Azure CLI authentication, if required."
+}
+
 variable "tags" {
   type        = map(string)
   default     = {}

@@ -24,7 +24,13 @@ The root module orchestrates five child modules:
 
 ## Deployment Instructions
 
-Initialize the environment with the backend config file:
+Authenticate interactively to Azure before running Terraform:
+
+```bash
+az login --subscription ad62b208-6a08-4773-ae1e-59e35590e272
+```
+
+Then initialize the environment with the backend config file:
 
 ```bash
 cd terraform
