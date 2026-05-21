@@ -1,70 +1,55 @@
-data "aws_availability_zones" "available" {
-  state = "available"
+terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 4.0"
+    }
+  }
 }
 
-module "network" {
-  source               = "./modules/network"
-  project_name         = var.project_name
-  environment          = local.environment
-  vpc_cidr             = var.vpc_cidr
-  public_subnet_cidrs  = var.public_subnet_cidrs
-  private_subnet_cidrs = var.private_subnet_cidrs
-  azs                  = data.aws_availability_zones.available.names
-  create_nat_gateway   = var.create_nat_gateway
-  tags                 = local.common_tags
+provider "azurerm" {
+  features {}
 }
 
-module "security" {
-  source              = "./modules/security"
-  project_name        = var.project_name
-  environment         = local.environment
-  vpc_id              = module.network.vpc_id
-  app_port            = var.app_port
-  allowed_cidr_blocks = var.allowed_cidr_blocks
-  tags                = local.common_tags
+locals {
+  environment = var.environment != "" ? var.environment : terraform.workspace
+  tags = merge(var.tags, {
+    Environment = local.environment
+    Project     = var.project_name
+    ManagedBy   = "Terraform"
+  })
 }
 
-module "iam" {
-  source              = "./modules/iam"
-  project_name        = var.project_name
-  environment         = local.environment
-  aws_region          = var.aws_region
-  ecr_repository_name = var.ecr_repository_name
-  tags                = local.common_tags
+module "web_service" {
+  source                   = "./modules/azure_container_app"
+  resource_group_name      = var.resource_group_name
+  location                 = var.location
+  container_app_name       = var.container_app_name
+  environment_name         = var.container_app_environment_name
+  acr_name                 = var.acr_name
+  app_image                = var.app_image
+  container_cpu            = var.container_cpu
+  container_memory         = var.container_memory
+  container_port           = var.container_port
+  acr_sku                  = var.acr_sku
+  min_replicas             = var.min_replicas
+  max_replicas             = var.max_replicas
+  http_concurrent_requests = var.http_concurrent_requests
+  shutdown_cron            = var.shutdown_cron
+  startup_cron             = var.startup_cron
+  timezone                 = var.timezone
+  log_retention_days       = var.log_retention_days
+  tags                     = local.tags
 }
 
-module "storage" {
-  source             = "./modules/storage"
-  project_name       = var.project_name
-  environment        = local.environment
-  bucket_name_prefix = var.bucket_name_prefix
-  enable_kms         = var.bucket_enable_kms
-  tags               = local.common_tags
+output "container_app_url" {
+  description = "Public URL for the deployed Container App."
+  value       = module.web_service.container_app_fqdn
 }
 
-module "compute" {
-  source                     = "./modules/compute"
-  project_name               = var.project_name
-  environment                = local.environment
-  application_name           = var.application_name
-  app_container_image        = var.app_container_image
-  app_cpu                    = var.app_cpu
-  app_memory                 = var.app_memory
-  app_min_count              = var.app_desired_count
-  app_max_count              = var.app_max_count
-  app_target_cpu_utilization = var.app_target_cpu_utilization
-  app_port                   = var.app_port
-  health_check_path          = var.app_health_check_path
-  log_retention_days         = var.log_retention_days
-  cluster_name               = "${var.project_name}-${local.environment}-ecs-cluster"
-  service_name               = "${var.project_name}-${local.environment}-ecs-service"
-  aws_region                 = var.aws_region
-  vpc_id                     = module.network.vpc_id
-  subnet_ids                 = module.network.private_subnet_ids
-  alb_security_group_id      = module.security.alb_security_group_id
-  ecs_security_group_id      = module.security.ecs_security_group_id
-  task_execution_role_arn    = module.iam.ecs_task_execution_role_arn
-  task_role_arn              = module.iam.ecs_task_role_arn
-  tags                       = local.common_tags
+output "acr_login_server" {
+  description = "Azure Container Registry login server."
+  value       = module.web_service.acr_login_server
 }
-

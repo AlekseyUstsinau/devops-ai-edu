@@ -1,225 +1,185 @@
-variable "environment" {
+variable "subscription_id" {
   type        = string
   default     = ""
-  description = "Deployment environment identifier. If empty, terraform workspace is used."
-  validation {
-    condition     = var.environment == "" || contains(["dev", "staging", "prod"], var.environment)
-    error_message = "environment must be one of: dev, staging, prod, or blank to use the current workspace."
-  }
+  description = "Azure subscription ID for the deployment. If empty, provider auth defaults are used."
+}
+
+variable "tenant_id" {
+  type        = string
+  default     = ""
+  description = "Azure tenant ID for provider authentication."
 }
 
 variable "project_name" {
   type        = string
-  default     = "devops-ai-edu"
-  description = "High-level project identifier used to name and tag resources."
-  validation {
-    condition     = length(trimspace(var.project_name)) > 0
-    error_message = "project_name cannot be empty."
-  }
+  default     = "devops-ai-app"
+  description = "Project name used for naming and tagging."
 }
 
-variable "owner" {
-  type        = string
-  default     = "DevOps Team"
-  description = "Primary owner or team responsible for the infrastructure."
-  validation {
-    condition     = length(trimspace(var.owner)) > 0
-    error_message = "owner cannot be empty."
-  }
-}
-
-variable "aws_region" {
-  type        = string
-  default     = "us-east-2"
-  description = "AWS region for infrastructure deployment."
-  validation {
-    condition     = length(trimspace(var.aws_region)) > 0
-    error_message = "aws_region cannot be empty."
-  }
-}
-
-variable "application_name" {
-  type        = string
-  default     = "web-app"
-  description = "Logical name of the application being deployed."
-  validation {
-    condition     = length(trimspace(var.application_name)) > 0
-    error_message = "application_name cannot be empty."
-  }
-}
-
-variable "app_container_image" {
-  type        = string
-  default     = "public.ecr.aws/nginx/nginx:1.26.0"
-  description = "Container image used by the ECS task. Fixed image versions reduce drift and security risk."
-  validation {
-    condition     = length(trimspace(var.app_container_image)) > 0
-    error_message = "app_container_image cannot be empty."
-  }
-}
-
-variable "app_cpu" {
-  type        = number
-  default     = 256
-  description = "Fargate task CPU allocation in CPU units."
-  validation {
-    condition     = var.app_cpu >= 256 && var.app_cpu <= 4096
-    error_message = "app_cpu must be between 256 and 4096."
-  }
-}
-
-variable "app_memory" {
-  type        = number
-  default     = 512
-  description = "Fargate task memory allocation in MiB."
-  validation {
-    condition     = var.app_memory >= 512 && var.app_memory <= 8192
-    error_message = "app_memory must be between 512 and 8192."
-  }
-}
-
-variable "app_desired_count" {
-  type        = number
-  default     = 1
-  description = "Minimum number of ECS tasks to maintain."
-  validation {
-    condition     = var.app_desired_count >= 1 && var.app_desired_count <= 10
-    error_message = "app_desired_count must be between 1 and 10."
-  }
-}
-
-variable "app_port" {
-  type        = number
-  default     = 80
-  description = "Network port exposed by the application container."
-  validation {
-    condition     = var.app_port > 0 && var.app_port <= 65535
-    error_message = "app_port must be a valid port number."
-  }
-}
-
-variable "app_max_count" {
-  type        = number
-  default     = 3
-  description = "Maximum number of ECS tasks allowed by autoscaling."
-  validation {
-    condition     = var.app_max_count >= var.app_desired_count && var.app_max_count <= 10
-    error_message = "app_max_count must be between app_desired_count and 10."
-  }
-}
-
-variable "app_target_cpu_utilization" {
-  type        = number
-  default     = 60
-  description = "Target CPU utilization for ECS autoscaling."
-  validation {
-    condition     = var.app_target_cpu_utilization >= 40 && var.app_target_cpu_utilization <= 80
-    error_message = "app_target_cpu_utilization must be between 40 and 80."
-  }
-}
-
-variable "app_health_check_path" {
-  type        = string
-  default     = "/"
-  description = "Health check path used by the load balancer target group."
-}
-
-variable "log_retention_days" {
-  type        = number
-  default     = 30
-  description = "CloudWatch Logs retention period for ECS task logs."
-  validation {
-    condition     = var.log_retention_days >= 7 && var.log_retention_days <= 3650
-    error_message = "log_retention_days must be between 7 and 3650."
-  }
-}
-
-variable "vpc_cidr" {
-  type        = string
-  default     = "10.0.0.0/16"
-  description = "CIDR block for the application VPC."
-  validation {
-    condition     = length(trimspace(var.vpc_cidr)) > 0
-    error_message = "vpc_cidr cannot be empty."
-  }
-}
-
-variable "public_subnet_cidrs" {
-  type        = list(string)
-  default     = ["10.0.1.0/24", "10.0.2.0/24"]
-  description = "CIDR blocks for public subnets. Must match the number of availability zones used."
-  validation {
-    condition     = length(var.public_subnet_cidrs) >= 2
-    error_message = "At least two public_subnet_cidrs entries are required."
-  }
-}
-
-variable "private_subnet_cidrs" {
-  type        = list(string)
-  default     = ["10.0.101.0/24", "10.0.102.0/24"]
-  description = "CIDR blocks for private subnets. Must match the number of availability zones used."
-  validation {
-    condition     = length(var.private_subnet_cidrs) >= 2
-    error_message = "At least two private_subnet_cidrs entries are required."
-  }
-}
-
-variable "allowed_cidr_blocks" {
-  type        = list(string)
-  default     = []
-  description = "CIDR blocks allowed to access the application load balancer. Must be explicitly configured for production."
-  validation {
-    condition     = length(var.allowed_cidr_blocks) > 0
-    error_message = "allowed_cidr_blocks must contain at least one CIDR block. Avoid 0.0.0.0/0 for production."
-  }
-}
-
-variable "create_nat_gateway" {
-  type        = bool
-  default     = true
-  description = "Create a single NAT gateway for private subnet outbound access."
-}
-
-variable "ecr_repository_name" {
-  type        = string
-  default     = "app-repository"
-  description = "ECR repository name used for task execution permissions."
-  validation {
-    condition     = length(trimspace(var.ecr_repository_name)) > 0
-    error_message = "ecr_repository_name cannot be empty."
-  }
-}
-
-variable "bucket_name_prefix" {
-  type        = string
-  default     = "devops-ai-edu"
-  description = "Prefix used to construct the S3 bucket name in the storage module."
-  validation {
-    condition     = length(trimspace(var.bucket_name_prefix)) > 0
-    error_message = "bucket_name_prefix cannot be empty."
-  }
-}
-
-variable "bucket_enable_kms" {
-  type        = bool
-  default     = false
-  description = "Enable KMS encryption for the application artifact bucket."
-}
-
-variable "azure_subscription_id" {
+variable "environment" {
   type        = string
   default     = ""
-  description = "Azure subscription ID used for Terraform Azure resources."
-}
-
-variable "azure_tenant_id" {
-  type        = string
-  default     = ""
-  description = "Azure tenant ID used for Azure CLI authentication, if required."
+  description = "Deployment environment identifier. Uses terraform workspace when empty."
 }
 
 variable "tags" {
   type        = map(string)
   default     = {}
-  description = "Additional tags to merge with standardized project tags."
+  description = "Common tags to apply to Azure resources."
+}
+
+variable "location" {
+  type        = string
+  default     = "westeurope"
+  description = "Azure region for deployment."
+}
+
+variable "resource_group_name" {
+  type        = string
+  default     = "staging-rg"
+  description = "Resource group name for the staging environment."
+}
+
+variable "container_app_name" {
+  type        = string
+  default     = "staging-web-app"
+  description = "Name of the Azure Container App resource."
+}
+
+variable "container_app_environment_name" {
+  type        = string
+  default     = "staging-app-env"
+  description = "Container Apps environment name."
+}
+
+variable "acr_name" {
+  type        = string
+  default     = "stagingacr12345"
+  description = "Azure Container Registry name for the app image."
+}
+
+variable "app_image" {
+  type        = string
+  default     = "stagingacr12345.azurecr.io/staging-web-app:latest"
+  description = "Container image reference in ACR for deployment."
+}
+
+variable "container_cpu" {
+  type        = number
+  default     = 0.25
+  description = "CPU units for the container app."
+}
+
+variable "container_memory" {
+  type        = number
+  default     = 0.5
+  description = "Memory in GiB for the container app."
+}
+
+variable "container_port" {
+  type        = number
+  default     = 80
+  description = "Port exposed by the container app."
+}
+
+variable "min_replicas" {
+  type        = number
+  default     = 0
+  description = "Minimum replica count for the Container App."
+}
+
+variable "max_replicas" {
+  type        = number
+  default     = 3
+  description = "Maximum replica count for autoscaling."
+}
+
+variable "http_concurrent_requests" {
+  type        = number
+  default     = 50
+  description = "Request concurrency threshold for HTTP autoscaling."
+}
+
+variable "shutdown_cron" {
+  type        = string
+  default     = "0 22 * * *"
+  description = "Cron expression when the app should scale to zero."
+}
+
+variable "startup_cron" {
+  type        = string
+  default     = "0 7 * * *"
+  description = "Cron expression when the app should scale back up."
+}
+
+variable "timezone" {
+  type        = string
+  default     = "UTC"
+  description = "Timezone used for scheduled scale rules."
+}
+
+variable "log_retention_days" {
+  type        = number
+  default     = 7
+  description = "Retention days for Log Analytics logs."
+}
+
+variable "acr_sku" {
+  type        = string
+  default     = "Basic"
+  description = "SKU for Azure Container Registry."
+}
+
+variable "backend_resource_group_name" {
+  type        = string
+  default     = "tfstate-rg"
+  description = "Resource group for Terraform backend storage."
+}
+
+variable "backend_storage_account_name" {
+  type        = string
+  default     = "tfstatestaging"
+  description = "Storage account name for Terraform remote state."
+}
+
+variable "backend_container_name" {
+  type        = string
+  default     = "tfstate"
+  description = "Blob container name for Terraform state."
+}
+
+variable "backend_state_key" {
+  type        = string
+  default     = "staging.terraform.tfstate"
+  description = "State file key for the Terraform backend."
+}
+
+variable "repository_url" {
+  type        = string
+  default     = "https://github.com/example/repo.git"
+  description = "Git repository URL for CI/CD."
+}
+
+variable "repository_branch" {
+  type        = string
+  default     = "main"
+  description = "Branch used to trigger the CI/CD pipeline."
+}
+
+variable "pipeline_name" {
+  type        = string
+  default     = "staging-deploy-pipeline"
+  description = "Pipeline name for deployment automation."
+}
+
+variable "docker_image_name" {
+  type        = string
+  default     = "staging-web-app"
+  description = "Docker image name stored in ACR."
+}
+
+variable "docker_image_tag" {
+  type        = string
+  default     = "latest"
+  description = "Docker image tag used for deployment."
 }
